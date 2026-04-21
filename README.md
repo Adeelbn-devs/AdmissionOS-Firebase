@@ -34,7 +34,7 @@ Getting AdmissionOS running locally takes just a few minutes.
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/AdmissionOS-Firebase.git
+https://github.com/Adeelbn-devs/AdmissionOS-Firebase.git
 cd AdmissionOS-Firebase
 ```
 

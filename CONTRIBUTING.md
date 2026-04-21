@@ -1,0 +1,1 @@
+> We welcome contributions! If you want to help improve AdmissionOS, please check the open issues, fork the repo, and submit a Pull Request. Make sure your code follows the existing Glassmorphism design system.
