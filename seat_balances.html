@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Seat Matrix | DACG Polytechnic Chikkamagalur</title>
+  <meta name="description" content="Real-time seat availability across all 6 engineering branches at DACG Govt Polytechnic Chikkamagalur.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar-glass" id="mainNavbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand-text">
+      <img src="images/collage logo.jpg" alt="DACG">
+      D<span class="brand-accent">.</span>A<span class="brand-accent">.</span>C<span class="brand-accent">.</span>G Polytechnic
+    </a>
+    <div class="nav-links-group">
+      <a href="index.html"            class="nav-link-glass"><i class="fas fa-home"></i> Home</a>
+      <a href="application_form.html" class="nav-link-glass"><i class="fas fa-pen"></i> Apply Now</a>
+      <a href="admin.html"            class="nav-link-glass"><i class="fas fa-shield-halved"></i> Admin</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Page -->
+<div class="page-wrapper">
+  <div class="container py-5">
+
+    <!-- Header -->
+    <div class="text-center mb-5 reveal">
+      <div class="section-eyebrow"><i class="fas fa-satellite-dish"></i> Live from Firestore · Auto-updates</div>
+      <h1 class="section-title">Branch <span class="grad-text">Seat Matrix</span></h1>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">Real-time seat availability across all branches and quota categories — refreshed automatically</p>
+    </div>
+
+    <!-- Stats Dashboard -->
+    <div class="row g-3 mb-5">
+      <div class="col-6 col-md-3 reveal reveal-delay-1">
+        <div class="glass-card p-4 text-center h-100">
+          <div class="hero-stat-num" id="statTotal">—</div>
+          <div class="hero-stat-label mt-1">Total Seats</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 reveal reveal-delay-2">
+        <div class="glass-card p-4 text-center h-100">
+          <div class="hero-stat-num" id="statGov" style="color:#6ee7b7;">—</div>
+          <div class="hero-stat-label mt-1">Government</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 reveal reveal-delay-3">
+        <div class="glass-card p-4 text-center h-100">
+          <div class="hero-stat-num" id="statDonor" style="color:#a5b4fc;">—</div>
+          <div class="hero-stat-label mt-1">Donor</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 reveal reveal-delay-4">
+        <div class="glass-card p-4 text-center h-100">
+          <div class="hero-stat-num" id="statSNQ" style="color:#fcd34d;">—</div>
+          <div class="hero-stat-label mt-1">SNQ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Branch Overview -->
+    <div class="row g-3 mb-5" id="branchCardRow">
+      <div class="col-12 text-center py-4">
+        <div class="loading-spinner" style="width:36px;height:36px;border-width:3px;"></div>
+        <p class="mt-3 text-muted-w" style="font-size:0.85rem;">Loading…</p>
+      </div>
+    </div>
+
+    <!-- Seat Table -->
+    <div class="seat-table-wrapper mb-5 reveal">
+      <div class="seat-table-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+          <h2 class="mb-1"><i class="fas fa-table-cells me-2" style="color:var(--cyan);"></i>Detailed Seat Balances</h2>
+          <p class="mb-0" style="color:rgba(255,255,255,0.5);font-size:0.82rem;">Tap any row to view more details</p>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+          <button id="refreshBtn" class="btn-ghost" style="font-size:0.8rem;padding:8px 16px;">
+            <i class="fas fa-rotate-right"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div id="tableLoading" class="text-center py-5" style="color:#64748b;">
+        <div class="loading-spinner" style="border-top-color:var(--indigo);width:36px;height:36px;border-width:3px;margin:0 auto 14px;"></div>
+        <p style="font-size:0.88rem;">Loading seat data from Firestore…</p>
+      </div>
+
+      <!-- Table -->
+      <div id="tableWrap" style="display:none;overflow-x:auto;">
+        <table class="seat-table" id="seatTable">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding-left:28px;">Branch</th>
+              <th>Government</th>
+              <th>Donor</th>
+              <th>SNQ</th>
+              <th>Total</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="seatTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="glass-card p-4 mb-5 reveal">
+      <h6 style="font-weight:700;font-size:0.92rem;margin-bottom:1rem;color:var(--text-primary);">
+        <i class="fas fa-circle-info me-2" style="color:var(--cyan);"></i>Seat Category &amp; Quota Legend
+      </h6>
+      <div class="row g-3">
+        <div class="col-sm-4">
+          <div class="d-flex align-items-start gap-3 p-3 rounded-3" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);">
+            <span style="width:12px;height:12px;background:#10b981;border-radius:50%;flex-shrink:0;margin-top:4px;"></span>
+            <div>
+              <div style="font-weight:700;font-size:0.85rem;color:#6ee7b7;">Government Seats</div>
+              <div style="font-size:0.76rem;color:rgba(110,231,183,0.65);">State merit-based · Fee ₹4,160/year</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="d-flex align-items-start gap-3 p-3 rounded-3" style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);">
+            <span style="width:12px;height:12px;background:#6366f1;border-radius:50%;flex-shrink:0;margin-top:4px;"></span>
+            <div>
+              <div style="font-weight:700;font-size:0.85rem;color:#a5b4fc;">Donor Seats</div>
+              <div style="font-size:0.76rem;color:rgba(165,180,252,0.65);">Management quota · Fee ₹1,260/year</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="d-flex align-items-start gap-3 p-3 rounded-3" style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);">
+            <span style="width:12px;height:12px;background:#f59e0b;border-radius:50%;flex-shrink:0;margin-top:4px;"></span>
+            <div>
+              <div style="font-weight:700;font-size:0.85rem;color:#fcd34d;">SNQ Seats</div>
+              <div style="font-size:0.76rem;color:rgba(252,211,77,0.65);">Special / National Qualifying quota</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center reveal">
+      <a href="application_form.html" class="btn-primary-glow" style="font-size:1.05rem;padding:16px 44px;">
+        <i class="fas fa-pen-to-square"></i> Apply for Admission Now
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer-glass">
+  <div class="container">
+    <p class="mb-1"><strong>D.A.C.G Government Polytechnic</strong> &middot; Chikkamagalur, Karnataka</p>
+    <p class="mb-0">&copy; 2025 Diploma Admission System &middot; <a href="admin.html">Admin Panel</a></p>
+  </div>
+</footer>
+
+<!-- Chatbot FAB -->
+<div id="ai-chatbot-fab">
+  <div class="fab-btn" id="fabToggle">🤖</div>
+  <span class="fab-label">Student AI Assistant</span>
+</div>
+<div class="chatbot-panel" id="chatbotPanel">
+  <div class="chatbot-header">
+    <div class="chatbot-header-info"><div class="chatbot-avatar">🤖</div><div><h6>Student AI Assistant</h6><p>Claude AI · Coming soon</p></div></div>
+    <button class="chatbot-close" id="chatbotClose">&times;</button>
+  </div>
+  <div class="chatbot-body"><div>
+    <div style="font-size:2.5rem;margin-bottom:12px;">📊</div>
+    <p style="color:rgba(255,255,255,0.4);font-size:0.84rem;">Ask about seat availability, categories, quotas…</p>
+  </div></div>
+  <div class="chatbot-footer">
+    <div class="chatbot-input-row">
+      <input class="chatbot-input" placeholder="Ask anything…" disabled>
+      <button class="chatbot-send" disabled>➤</button>
+    </div>
+  </div>
+</div>
+<button id="scrollTopBtn" title="Back to top"><i class="fas fa-arrow-up fa-xs"></i></button>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="firebase_config.js"></script>
+<script src="firebase_service.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const BRANCH_NAMES = {
+  CS:'Computer Science', EC:'Electronics & Communication',
+  EE:'Electrical & Electronics', 'E&E':'Electrical & Electronics',
+  ME:'Mechanical Engineering', CE:'Civil Engineering', AT:'Automobile Engineering'
+};
+const BRANCH_ICONS = { CS:'💻', EC:'📡', EE:'⚡', 'E&E':'⚡', ME:'⚙️', CE:'🏗️', AT:'🚗' };
+
+function getSeatClass(n) { return n===0?'empty':n<=5?'low':'available'; }
+function getStatusBadge(total) {
+  if (total === 0) return `<span class="badge rounded-pill" style="background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);font-size:0.7rem;font-weight:700;">FULL</span>`;
+  if (total <= 5)  return `<span class="badge rounded-pill" style="background:rgba(245,158,11,0.15);color:#fcd34d;border:1px solid rgba(245,158,11,0.3);font-size:0.7rem;font-weight:700;">ALMOST FULL</span>`;
+  return `<span class="badge rounded-pill" style="background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);font-size:0.7rem;font-weight:700;">AVAILABLE</span>`;
+}
+
+function renderAll(branches) {
+  // KPI cards
+  let tG=0,tD=0,tS=0;
+  branches.forEach(b => { tG+=b.government_seats; tD+=b.donor_seats; tS+=b.snq_seats; });
+  document.getElementById('statTotal').textContent = tG+tD+tS;
+  document.getElementById('statGov').textContent   = tG;
+  document.getElementById('statDonor').textContent = tD;
+  document.getElementById('statSNQ').textContent   = tS;
+
+  // Mini branch cards
+  const grid = document.getElementById('branchCardRow');
+  grid.innerHTML = branches.map((b,i) => {
+    const total = b.government_seats + b.donor_seats + b.snq_seats;
+    const icon  = BRANCH_ICONS[b.id] || '🎓';
+    const name  = BRANCH_NAMES[b.id] || b.id;
+    const pct   = Math.round((total / 70) * 100); // rough % assuming 70 max
+    return `
+    <div class="col-sm-6 col-lg-4 reveal reveal-delay-${(i%3)+1}">
+      <div class="glass-card p-4 h-100">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="branch-icon" style="width:48px;height:48px;min-width:48px;border-radius:12px;font-size:1.3rem;">${icon}</div>
+          <div>
+            <div style="font-weight:700;font-size:0.92rem;color:var(--text-primary);">${name}</div>
+            <div style="font-size:0.72rem;color:var(--text-secondary);letter-spacing:0.5px;">Branch: ${b.id}</div>
+          </div>
+          <div class="ms-auto">${getStatusBadge(total)}</div>
+        </div>
+        <div class="d-flex gap-2 justify-content-between">
+          <div class="text-center flex-fill p-2 rounded-2" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);">
+            <div style="font-size:1.3rem;font-weight:900;color:#6ee7b7;">${b.government_seats}</div>
+            <div style="font-size:0.65rem;color:rgba(110,231,183,0.6);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Gov</div>
+          </div>
+          <div class="text-center flex-fill p-2 rounded-2" style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);">
+            <div style="font-size:1.3rem;font-weight:900;color:#a5b4fc;">${b.donor_seats}</div>
+            <div style="font-size:0.65rem;color:rgba(165,180,252,0.6);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Donor</div>
+          </div>
+          <div class="text-center flex-fill p-2 rounded-2" style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.15);">
+            <div style="font-size:1.3rem;font-weight:900;color:#fcd34d;">${b.snq_seats}</div>
+            <div style="font-size:0.65rem;color:rgba(252,211,77,0.6);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">SNQ</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Table
+  document.getElementById('tableLoading').style.display = 'none';
+  document.getElementById('tableWrap').style.display    = 'block';
+
+  const rows = branches.map(b => {
+    const total = b.government_seats + b.donor_seats + b.snq_seats;
+    const cell  = (n, type) => `<td><span class="seat-count ${type==='total'?'total':getSeatClass(n)}">${n}</span></td>`;
+    return `<tr>
+      <td class="branch-name-cell" style="padding-left:28px;">
+        <span style="font-size:1.1rem;margin-right:8px;">${BRANCH_ICONS[b.id]||'🎓'}</span>
+        ${BRANCH_NAMES[b.id]||b.id}
+        <div style="font-size:0.7rem;color:#94a3b8;font-weight:400;margin-top:2px;">Code: ${b.id}</div>
+      </td>
+      ${cell(b.government_seats)}${cell(b.donor_seats)}${cell(b.snq_seats)}
+      ${cell(total,'total')}
+      <td>${getStatusBadge(total)}</td>
+    </tr>`;
+  }).join('');
+
+  // Totals row
+  const totalsRow = `
+    <tr style="background:#f8fafc;border-top:2px solid #e2e8f0;">
+      <td class="branch-name-cell fw-bold" style="padding-left:28px;color:#1e293b;">
+        <i class="fas fa-sigma me-2" style="color:var(--indigo-dark);"></i>TOTAL — All Branches
+      </td>
+      <td><span class="seat-count available">${tG}</span></td>
+      <td><span class="seat-count available">${tD}</span></td>
+      <td><span class="seat-count available">${tS}</span></td>
+      <td><span class="seat-count total" style="font-size:1rem;">${tG+tD+tS}</span></td>
+      <td>—</td>
+    </tr>`;
+
+  document.getElementById('seatTableBody').innerHTML = rows + totalsRow;
+
+  // Re-observe
+  document.querySelectorAll('.reveal:not(.revealed)').forEach(el => revealObs.observe(el));
+}
+
+// Scroll reveal
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// Live listener
+listenBranches(branches => {
+  if (!branches.length) {
+    document.getElementById('tableLoading').innerHTML = `
+      <p style="color:#94a3b8;font-size:0.88rem;">
+        No branch data. <a href="seed_firestore.html" class="grad-text" style="-webkit-text-fill-color:unset;">Run seeder →</a>
+      </p>`;
+    document.getElementById('branchCardRow').innerHTML =
+      `<div class="col-12 text-center py-3" style="color:#94a3b8;font-size:0.85rem;">No data yet.</div>`;
+    return;
+  }
+  renderAll(branches);
+});
+
+// Refresh btn
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  const btn = document.getElementById('refreshBtn');
+  btn.innerHTML = '<i class="fas fa-spin fa-rotate-right"></i> Refreshing…';
+  setTimeout(() => btn.innerHTML = '<i class="fas fa-rotate-right"></i> Refresh', 1800);
+});
+
+// Navbar / scroll top
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNavbar').classList.toggle('scrolled', window.scrollY > 60);
+  const b = document.getElementById('scrollTopBtn');
+  b.style.display = window.scrollY > 300 ? 'flex' : 'none';
+});
+
+// Chatbot
+document.getElementById('fabToggle').addEventListener('click',   () => document.getElementById('chatbotPanel').classList.toggle('open'));
+document.getElementById('chatbotClose').addEventListener('click', () => document.getElementById('chatbotPanel').classList.remove('open'));
+</script>
+</body>
+</html>

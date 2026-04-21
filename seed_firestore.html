@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seed Firestore | DACG Admin Setup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar-glass">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand-text">
+      <img src="images/collage logo.jpg" alt="DACG">
+      D<span class="brand-accent">.</span>A<span class="brand-accent">.</span>C<span class="brand-accent">.</span>G <span style="color:rgba(255,255,255,0.4);font-weight:400;">Setup</span>
+    </a>
+    <div class="nav-links-group">
+      <a href="index.html"  class="nav-link-glass"><i class="fas fa-home"></i> Home</a>
+      <a href="admin.html" class="nav-link-glass"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <div class="container" style="max-width:800px;padding:60px 16px 80px;">
+
+    <!-- Header -->
+    <div class="text-center mb-5 reveal">
+      <div class="section-eyebrow"><i class="fas fa-seedling"></i> One-Time Setup</div>
+      <h1 class="section-title">Firestore <span class="grad-text">Data Seeder</span></h1>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">Initialize the <code style="color:var(--cyan);background:rgba(6,182,212,0.1);padding:3px 10px;border-radius:6px;">branches</code> collection with seat data from the original SQL schema</p>
+    </div>
+
+    <!-- Important Notice -->
+    <div class="glass-card p-4 mb-5 reveal" style="border-left:3px solid var(--warning);">
+      <h6 style="color:var(--gold-light);font-weight:700;margin-bottom:10px;font-size:0.9rem;">
+        <i class="fas fa-triangle-exclamation me-2"></i>Read Before Seeding
+      </h6>
+      <ul style="color:var(--text-secondary);font-size:0.84rem;margin:0;padding-left:20px;line-height:2;">
+        <li>Creates 6 documents in Firestore with IDs: <code style="color:var(--cyan-light);font-size:0.8rem;">CS, EC, EE, ME, CE, AT</code></li>
+        <li>Run this <strong style="color:var(--text-primary);">only once</strong> when setting up fresh — it will overwrite existing branch data</li>
+        <li>Firestore rules must be <code style="color:var(--cyan-light);font-size:0.8rem;">allow read, write: if true</code> during development</li>
+        <li>After seeding, use <strong style="color:var(--text-primary);">Admin → Seat Allotment</strong> to manage seat counts atomically</li>
+      </ul>
+    </div>
+
+    <!-- Data Preview -->
+    <div class="tab-card mb-5 reveal">
+      <div class="tab-card-header">
+        <h4><i class="fas fa-database"></i> Data to be Seeded</h4>
+      </div>
+      <div class="tab-card-body p-0" style="overflow-x:auto;">
+        <table class="admin-table" id="previewTable">
+          <thead>
+            <tr>
+              <th>Branch ID</th>
+              <th>Full Name</th>
+              <th>Govt</th>
+              <th>Donor</th>
+              <th>SNQ</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="previewBody"></tbody>
+          <tfoot>
+            <tr style="background:rgba(99,102,241,0.05);border-top:1px solid rgba(255,255,255,0.08);">
+              <td colspan="2" style="text-align:left;font-weight:800;color:var(--text-primary);padding:14px 20px;">TOTAL</td>
+              <td id="totalGov"   style="font-weight:800;color:#6ee7b7;text-align:center;"></td>
+              <td id="totalDonor" style="font-weight:800;color:#a5b4fc;text-align:center;"></td>
+              <td id="totalSNQ"   style="font-weight:800;color:#fcd34d;text-align:center;"></td>
+              <td id="totalAll"   style="font-weight:800;color:var(--indigo-light);text-align:center;"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Seeder Actions -->
+    <div class="tab-card reveal">
+      <div class="tab-card-header">
+        <h4><i class="fas fa-rocket"></i> Run Seeder</h4>
+      </div>
+      <div class="tab-card-body text-center">
+        <div style="font-size:3rem;margin-bottom:1rem;">🌱</div>
+        <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:2rem;">
+          This will create/overwrite 6 documents in the <code style="color:var(--cyan-light);">branches</code> Firestore collection.
+        </p>
+        <button class="btn-primary-glow" id="btnSeed" onclick="seedBranches()" style="font-size:1rem;padding:15px 44px;">
+          <i class="fas fa-seedling"></i> Seed Branch Data to Firestore
+        </button>
+
+        <!-- Log -->
+        <div id="logArea" style="display:none;margin-top:2rem;text-align:left;">
+          <h6 style="font-size:0.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:12px;">
+            <i class="fas fa-terminal me-2"></i>Seeding Log
+          </h6>
+          <div id="logList" class="p-3 rounded-3" style="background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.06);font-family:monospace;font-size:0.8rem;line-height:2;max-height:300px;overflow-y:auto;"></div>
+        </div>
+
+        <!-- Success -->
+        <div id="seedSuccess" style="display:none;margin-top:2rem;">
+          <div style="font-size:3rem;margin-bottom:0.5rem;">🎉</div>
+          <h5 style="color:#6ee7b7;font-weight:800;margin-bottom:0.5rem;">All 6 branches seeded successfully!</h5>
+          <p style="color:var(--text-secondary);font-size:0.88rem;margin-bottom:1.5rem;">The branches collection is initialized in Firestore.</p>
+          <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="seat_balances.html" class="btn-accent"><i class="fas fa-table me-2"></i>View Live Seat Matrix</a>
+            <a href="admin.html" class="btn-ghost"><i class="fas fa-tachometer-alt me-1"></i>Admin Dashboard</a>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div id="seedError" style="display:none;" class="mt-3 p-4 rounded-3 text-start" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);">
+          <div style="color:#f87171;font-size:0.85rem;" id="seedErrorText"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manual Setup Instructions -->
+    <div class="glass-card p-4 mt-5 reveal">
+      <h6 style="font-weight:700;color:var(--text-primary);margin-bottom:1rem;font-size:0.88rem;">
+        <i class="fas fa-terminal me-2" style="color:var(--cyan);"></i>Alternative: Manual Firestore Setup
+      </h6>
+      <p style="color:var(--text-secondary);font-size:0.83rem;margin-bottom:0.75rem;">
+        Go to <a href="https://console.firebase.google.com" target="_blank" style="color:var(--cyan-light);">Firebase Console</a> → Firestore → Create collection <code style="color:var(--cyan-light);">branches</code> with these documents:
+      </p>
+      <pre style="background:rgba(0,0,0,0.5);padding:18px;border-radius:12px;font-size:0.77rem;color:#67e8f9;white-space:pre-wrap;border:1px solid rgba(6,182,212,0.15);line-height:1.8;">// Document ID: CS → government_seats:29, donor_seats:2, snq_seats:5, order:1
+// Document ID: EE → government_seats:57, donor_seats:2, snq_seats:5, order:2
+// Document ID: ME → government_seats:59, donor_seats:2, snq_seats:5, order:3
+// Document ID: EC → government_seats:58, donor_seats:2, snq_seats:5, order:4
+// Document ID: CE → government_seats:63, donor_seats:2, snq_seats:5, order:5
+// Document ID: AT → government_seats:54, donor_seats:2, snq_seats:5, order:6</pre>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer-glass">
+  <div class="container text-center">
+    <p class="mb-0">&copy; 2025 DACG Diploma Admission System &nbsp;·&nbsp; <a href="admin.html">Admin Dashboard</a></p>
+  </div>
+</footer>
+
+<button id="scrollTopBtn" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fas fa-arrow-up fa-xs"></i>
+</button>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase_config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+const SEED_BRANCHES = [
+  { id:'CS', name:'CS', fullName:'Computer Science',           order:1, government_seats:29, donor_seats:2, snq_seats:5 },
+  { id:'EE', name:'EE', fullName:'Electrical & Electronics',   order:2, government_seats:57, donor_seats:2, snq_seats:5 },
+  { id:'ME', name:'ME', fullName:'Mechanical Engineering',      order:3, government_seats:59, donor_seats:2, snq_seats:5 },
+  { id:'EC', name:'EC', fullName:'Electronics & Communication', order:4, government_seats:58, donor_seats:2, snq_seats:5 },
+  { id:'CE', name:'CE', fullName:'Civil Engineering',           order:5, government_seats:63, donor_seats:2, snq_seats:5 },
+  { id:'AT', name:'AT', fullName:'Automobile Engineering',      order:6, government_seats:54, donor_seats:2, snq_seats:5 },
+];
+
+function renderPreview() {
+  let tG=0,tD=0,tS=0;
+  document.getElementById('previewBody').innerHTML = SEED_BRANCHES.map(b => {
+    tG+=b.government_seats; tD+=b.donor_seats; tS+=b.snq_seats;
+    const total = b.government_seats+b.donor_seats+b.snq_seats;
+    return `<tr>
+      <td style="text-align:left;padding-left:20px;"><code style="color:var(--cyan-light);font-weight:700;">${b.id}</code></td>
+      <td style="text-align:left;">${b.fullName}</td>
+      <td style="text-align:center;color:#6ee7b7;font-weight:700;">${b.government_seats}</td>
+      <td style="text-align:center;color:#a5b4fc;font-weight:700;">${b.donor_seats}</td>
+      <td style="text-align:center;color:#fcd34d;font-weight:700;">${b.snq_seats}</td>
+      <td style="text-align:center;font-weight:800;color:var(--text-primary);">${total}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('totalGov').textContent   = tG;
+  document.getElementById('totalDonor').textContent = tD;
+  document.getElementById('totalSNQ').textContent   = tS;
+  document.getElementById('totalAll').textContent   = tG+tD+tS;
+}
+
+async function seedBranches() {
+  const btn = document.getElementById('btnSeed');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner me-2" style="width:18px;height:18px;border-width:2px;border-top-color:#fff;"></span>Seeding…';
+
+  document.getElementById('logArea').style.display    = 'block';
+  document.getElementById('seedSuccess').style.display = 'none';
+  document.getElementById('seedError').style.display   = 'none';
+  const log = document.getElementById('logList');
+  log.innerHTML = '';
+
+  function addLog(msg, ok=true) {
+    const div = document.createElement('div');
+    div.style.color = ok ? '#6ee7b7' : '#f87171';
+    div.textContent = (ok?'✅ ':'❌ ') + msg;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  try {
+    for (const b of SEED_BRANCHES) {
+      await db.collection('branches').doc(b.id).set({
+        name: b.name, order: b.order,
+        government_seats: b.government_seats,
+        donor_seats: b.donor_seats,
+        snq_seats: b.snq_seats,
+        seeded_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      addLog(`Seeded ${b.id} — ${b.fullName} (Gov:${b.government_seats} Donor:${b.donor_seats} SNQ:${b.snq_seats})`);
+    }
+    addLog('All 6 branches seeded successfully! 🎉');
+    document.getElementById('seedSuccess').style.display = 'block';
+    btn.innerHTML = '<i class="fas fa-check me-2"></i>Done!';
+  } catch(err) {
+    addLog(err.message, false);
+    document.getElementById('seedError').style.display = 'block';
+    document.getElementById('seedErrorText').textContent =
+      `Error: ${err.message}\n\nCheck your Firestore Security Rules — set: allow read, write: if true;`;
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-seedling me-2"></i>Retry';
+  }
+}
+
+// Scroll reveal
+const obs = new IntersectionObserver(e => e.forEach(en => {
+  if (en.isIntersecting) { en.target.classList.add('revealed'); obs.unobserve(en.target); }
+}), { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Scroll top
+window.addEventListener('scroll', () => {
+  const b = document.getElementById('scrollTopBtn');
+  b.style.display = window.scrollY > 300 ? 'flex' : 'none';
+});
+
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  document.querySelector('.navbar-glass').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+renderPreview();
+</script>
+</body>
+</html>

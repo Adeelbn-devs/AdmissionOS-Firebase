@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DACG Diploma Admission Portal | Premier Engineering Polytechnic</title>
+  <meta name="description" content="Apply online for Diploma admissions at DACG Government Polytechnic Chikkamagalur. Real-time seats, AI-powered verification.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar-glass" id="mainNavbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand-text">
+      <img src="images/collage logo.jpg" alt="DACG">
+      D<span class="brand-accent">.</span>A<span class="brand-accent">.</span>C<span class="brand-accent">.</span>G Polytechnic
+    </a>
+    <div class="nav-links-group" id="navLinks">
+      <a href="index.html" class="nav-link-glass active"><i class="fas fa-home"></i> Home</a>
+      <a href="#branches"  class="nav-link-glass"><i class="fas fa-code-branch"></i> Branches</a>
+      <a href="seat_balances.html" class="nav-link-glass"><i class="fas fa-chair"></i> Seat Matrix</a>
+      <a href="admin.html" class="nav-link-glass"><i class="fas fa-shield-halved"></i> Admin</a>
+      <a href="application_form.html" class="nav-btn-apply"><i class="fas fa-pen"></i> Apply Now</a>
+    </div>
+    <button class="navbar-toggler-custom" id="menuToggle"><i class="fas fa-bars"></i></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-section">
+  <!-- Ambient orbs -->
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+
+  <div class="container position-relative" style="z-index:2;">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Admissions Open &nbsp;·&nbsp; 2025–26
+    </div>
+
+    <h1 class="hero-title">
+      Your Future Starts<br>
+      <span class="grad-text">Here at D.A.C.G</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      Government Polytechnic Chikkamagalur &mdash; 6 Engineering branches,
+      digital admissions, and AI-powered document verification. Apply in minutes.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="application_form.html" class="btn-primary-glow">
+        <i class="fas fa-pen-to-square"></i> Start Application
+      </a>
+      <a href="seat_balances.html" class="btn-outline-glow">
+        <i class="fas fa-chair"></i> View Seat Matrix
+      </a>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="glass-card hero-stats mt-5 rounded-3" style="display:inline-flex;width:auto;padding:0;">
+      <div class="hero-stat">
+        <span class="hero-stat-num">6</span>
+        <span class="hero-stat-label">Branches</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">320+</span>
+        <span class="hero-stat-label">Total Seats</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">100%</span>
+        <span class="hero-stat-label">Digital</span>
+      </div>
+      <div class="hero-stat" style="border-right:none;">
+        <span class="hero-stat-num">AI</span>
+        <span class="hero-stat-label">Verified</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMISSION BANNER -->
+<div class="container mb-5 reveal">
+  <div class="admission-banner">
+    🎓 Admissions Open! &nbsp;·&nbsp; Click a Branch card to view seat details &nbsp;·&nbsp; Limited seats — Apply early!
+  </div>
+</div>
+
+<!-- BRANCHES -->
+<section class="section-space" id="branches">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-eyebrow"><i class="fas fa-satellite-dish"></i> Real-Time — Live from Firestore</div>
+      <h2 class="section-title">Engineering <span class="grad-text">Branches</span></h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">Live seat counts across Government, Donor, and SNQ quota categories — updated instantly</p>
+    </div>
+
+    <div class="row g-4" id="branchGrid">
+      <div class="col-12 text-center py-5">
+        <div class="loading-spinner" style="width:40px;height:40px;border-width:4px;"></div>
+        <p class="mt-3 text-muted-w">Loading live seat data…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section-space">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-eyebrow"><i class="fas fa-sparkles"></i> Why Choose Us</div>
+      <h2 class="section-title">Built for the <span class="grad-text">Modern Era</span></h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">A fully digital, AI-powered admission experience — no paperwork, no queues</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 reveal reveal-delay-1">
+        <div class="feature-card h-100">
+          <div class="feature-icon-wrap">📋</div>
+          <h4>Paperless Applications</h4>
+          <p>Complete your 46-field application through an intuitive 5-step wizard. Upload all documents digitally to secure cloud storage.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal reveal-delay-2">
+        <div class="feature-card h-100">
+          <div class="feature-icon-wrap">🪑</div>
+          <h4>Real-Time Seat Monitor</h4>
+          <p>Watch seat counts update live across all 6 branches and 3 quota categories. Know your chances before you apply.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal reveal-delay-3">
+        <div class="feature-card h-100">
+          <div class="feature-icon-wrap">🤖</div>
+          <h4>Claude AI Verification</h4>
+          <p>Our admin panel uses Claude Vision AI to verify document authenticity, cutting review time from days to seconds.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal reveal-delay-1">
+        <div class="feature-card h-100">
+          <div class="feature-icon-wrap">🔒</div>
+          <h4>Secure by Design</h4>
+          <p>All data stored in Firebase with role-based access control. Your documents are encrypted and protected at rest.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal reveal-delay-2">
+        <div class="feature-card h-100">
+          <div class="feature-icon-wrap">⚡</div>
+          <h4>Instant Allotment</h4>
+          <p>Atomic Firestore transactions ensure seat allotments are conflict-free — just like your legacy PHP system, but faster.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal reveal-delay-3">
+        <div class="feature-card h-100">
+          <div class="feature-icon-wrap">📱</div>
+          <h4>Any Device, Anywhere</h4>
+          <p>Fully responsive — apply from your smartphone, verify documents on a tablet, manage seats on a desktop.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO APPLY -->
+<section class="section-space">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-eyebrow"><i class="fas fa-map"></i> Simple Process</div>
+      <h2 class="section-title">How to <span class="grad-text">Apply</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="d-flex flex-column gap-3">
+          <div class="step-item reveal reveal-delay-1">
+            <div class="step-number">1</div>
+            <div>
+              <h5>Check Seat Availability</h5>
+              <p>Visit the live Seat Matrix to confirm seats are open in your preferred branch and quota category.</p>
+            </div>
+          </div>
+          <div class="step-item reveal reveal-delay-2">
+            <div class="step-number">2</div>
+            <div>
+              <h5>Fill the 5-Step Application</h5>
+              <p>Complete personal, study, academic, category, and document upload steps in our wizard form.</p>
+            </div>
+          </div>
+          <div class="step-item reveal reveal-delay-3">
+            <div class="step-number">3</div>
+            <div>
+              <h5>Upload Your Documents</h5>
+              <p>Upload SSLC marks card, photo, TC, caste/income certificates, and Aadhar — all from your device.</p>
+            </div>
+          </div>
+          <div class="step-item reveal reveal-delay-4">
+            <div class="step-number">4</div>
+            <div>
+              <h5>AI-Assisted Verification</h5>
+              <p>Claude Vision AI assists admin staff to verify your documents within 2–3 working days.</p>
+            </div>
+          </div>
+          <div class="step-item reveal reveal-delay-5">
+            <div class="step-number">5</div>
+            <div>
+              <h5>Seat Allotment & Enrollment</h5>
+              <p>Receive your seat allotment, pay fees, and report to the college to complete your admission.</p>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-5 reveal">
+          <a href="application_form.html" class="btn-primary-glow" style="font-size:1.05rem;padding:16px 44px;">
+            <i class="fas fa-arrow-right"></i> Begin Your Application
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer-glass">
+  <div class="container">
+    <p class="mb-1">
+      <strong>D.A.C.G Government Polytechnic</strong> &nbsp;&middot;&nbsp; Chikkamagalur, Karnataka &nbsp;&middot;&nbsp; Est. 1970
+    </p>
+    <p class="mb-0">
+      &copy; 2025 Diploma Admission System &nbsp;&middot;&nbsp;
+      <a href="admin.html">Admin Panel</a> &nbsp;&middot;&nbsp;
+      <a href="seed_firestore.html">Seed Data</a> &nbsp;&middot;&nbsp;
+      Built with Firebase + Bootstrap 5
+    </p>
+  </div>
+</footer>
+
+<!-- CHATBOT FAB -->
+<div id="ai-chatbot-fab">
+  <div class="fab-btn" id="fabToggle">🤖</div>
+  <span class="fab-label">Student AI Assistant</span>
+</div>
+<div class="chatbot-panel" id="chatbotPanel">
+  <div class="chatbot-header">
+    <div class="chatbot-header-info">
+      <div class="chatbot-avatar">🤖</div>
+      <div><h6>Student AI Assistant</h6><p>Powered by Claude AI &middot; Coming soon</p></div>
+    </div>
+    <button class="chatbot-close" id="chatbotClose">&times;</button>
+  </div>
+  <div class="chatbot-body">
+    <div>
+      <div style="font-size:2.8rem;margin-bottom:14px;filter:grayscale(0.2);">🚀</div>
+      <p style="color:rgba(255,255,255,0.45);font-size:0.85rem;line-height:1.7;">
+        The AI Student Assistant will be integrated here.<br>
+        Ask about admissions, eligibility, branches &amp; more!
+      </p>
+    </div>
+  </div>
+  <div class="chatbot-footer">
+    <div class="chatbot-input-row">
+      <input class="chatbot-input" placeholder="Ask anything about admissions…" disabled>
+      <button class="chatbot-send" disabled>➤</button>
+    </div>
+    <p style="color:rgba(255,255,255,0.2);font-size:0.68rem;text-align:center;margin:8px 0 0;letter-spacing:0.3px;">Claude AI integration coming soon</p>
+  </div>
+</div>
+
+<!-- Branch Detail Modal -->
+<div class="modal fade" id="branchModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content" style="background:#0f172a;border:1px solid rgba(99,102,241,0.25);border-radius:20px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.6);">
+      <div class="modal-header" style="background:linear-gradient(135deg,#0f172a,#1e1b4b);border-bottom:1px solid rgba(99,102,241,0.2);padding:22px 28px;position:relative;">
+        <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--indigo),var(--cyan));"></div>
+        <h5 class="modal-title" id="modalBranchName" style="color:#fff;font-weight:800;font-size:1.2rem;"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4" id="modalBranchBody"></div>
+    </div>
+  </div>
+</div>
+
+<button id="scrollTopBtn" title="Back to top"><i class="fas fa-arrow-up fa-xs"></i></button>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="firebase_config.js"></script>
+<script src="firebase_service.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ── Navbar ───────────────────────────────────────────────── */
+const navbar = document.getElementById('mainNavbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+  const btn = document.getElementById('scrollTopBtn');
+  btn.style.display = window.scrollY > 400 ? 'flex' : 'none';
+});
+
+/* ── Mobile menu ──────────────────────────────────────────── */
+document.getElementById('menuToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+/* ── Scroll reveal (Intersection Observer) ─────────────────── */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('revealed'); revealObserver.unobserve(e.target); }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ── Smooth anchor scroll ─────────────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+/* ── Branch meta ──────────────────────────────────────────── */
+const BRANCH_META = {
+  CS:  { icon:'💻', label:'Computer Science',             desc:'Programming · Web Dev · AI · Data Structures' },
+  EC:  { icon:'📡', label:'Electronics & Communication',  desc:'Circuits · Signals · Embedded Systems · VLSI' },
+  EE:  { icon:'⚡', label:'Electrical & Electronics',     desc:'Power Systems · Machines · Control Systems' },
+  'E&E':{ icon:'⚡', label:'Electrical & Electronics',    desc:'Power Systems · Machines · Control Systems' },
+  ME:  { icon:'⚙️', label:'Mechanical Engineering',       desc:'Thermodynamics · Manufacturing · CAD/CAM' },
+  CE:  { icon:'🏗️', label:'Civil Engineering',            desc:'Structures · Surveying · Construction' },
+  AT:  { icon:'🚗', label:'Automobile Engineering',       desc:'Engine Design · Vehicle Dynamics · EV Tech' },
+};
+
+/* ── Render branch cards ─────────────────────────────────── */
+function renderBranchCards(branches) {
+  const grid = document.getElementById('branchGrid');
+  if (!branches.length) {
+    grid.innerHTML = `
+      <div class="col-12 text-center py-5">
+        <p class="text-muted-w">No branch data. <a href="seed_firestore.html" class="grad-text">Run the Firestore seeder →</a></p>
+      </div>`;
+    return;
+  }
+  grid.innerHTML = branches.map((b, i) => {
+    const m = BRANCH_META[b.id] || { icon:'🎓', label: b.name, desc:'' };
+    const govClass   = b.government_seats === 0 ? 'empty' : b.government_seats <= 5 ? 'low' : 'gov';
+    const donorClass = b.donor_seats === 0 ? 'empty' : 'donor';
+    const snqClass   = b.snq_seats === 0   ? 'empty' : 'snq';
+    const total = b.government_seats + b.donor_seats + b.snq_seats;
+    return `
+    <div class="col-sm-6 col-xl-4">
+      <div class="branch-card reveal reveal-delay-${(i%3)+1}"
+           onclick="openBranchModal(${JSON.stringify(b).replace(/"/g,'&quot;')})">
+        <div class="branch-icon">${m.icon}</div>
+        <h3>${m.label}</h3>
+        <p>${m.desc}</p>
+        <div class="seat-badges">
+          <span class="seat-badge ${govClass}">Gov: ${b.government_seats}</span>
+          <span class="seat-badge ${donorClass}">Donor: ${b.donor_seats}</span>
+          <span class="seat-badge ${snqClass}">SNQ: ${b.snq_seats}</span>
+        </div>
+        <div class="mt-3" style="font-size:0.73rem;color:rgba(255,255,255,0.35);">
+          Total: ${total} seats &nbsp;·&nbsp; Tap for details
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  // Re-observe newly added cards
+  document.querySelectorAll('.reveal:not(.revealed)').forEach(el => revealObserver.observe(el));
+}
+
+/* ── Branch modal ────────────────────────────────────────── */
+function openBranchModal(b) {
+  const m = BRANCH_META[b.id] || { icon:'🎓', label: b.name, desc:'' };
+  document.getElementById('modalBranchName').innerHTML = `${m.icon} &nbsp;${m.label}`;
+  const total = b.government_seats + b.donor_seats + b.snq_seats;
+  document.getElementById('modalBranchBody').innerHTML = `
+    <p style="color:#94a3b8;font-size:0.88rem;margin-bottom:1.5rem;">${m.desc}</p>
+    <div class="row g-3 mb-4">
+      <div class="col-4">
+        <div class="p-3 rounded-3 text-center" style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);">
+          <div style="font-size:2rem;font-weight:900;color:#6ee7b7;">${b.government_seats}</div>
+          <div style="font-size:0.72rem;color:#a7f3d0;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Government</div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="p-3 rounded-3 text-center" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);">
+          <div style="font-size:2rem;font-weight:900;color:#a5b4fc;">${b.donor_seats}</div>
+          <div style="font-size:0.72rem;color:#c7d2fe;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Donor</div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="p-3 rounded-3 text-center" style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);">
+          <div style="font-size:2rem;font-weight:900;color:#fcd34d;">${b.snq_seats}</div>
+          <div style="font-size:0.72rem;color:#fde68a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">SNQ</div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="application_form.html" class="btn-primary-glow">
+        <i class="fas fa-pen me-1"></i>Apply for This Branch
+      </a>
+      <a href="seat_balances.html" class="btn-ghost">
+        <i class="fas fa-table me-1"></i>Full Seat Matrix
+      </a>
+    </div>`;
+  new bootstrap.Modal(document.getElementById('branchModal')).show();
+}
+
+/* ── Chatbot toggle ──────────────────────────────────────── */
+document.getElementById('fabToggle').addEventListener('click',   () => document.getElementById('chatbotPanel').classList.toggle('open'));
+document.getElementById('chatbotClose').addEventListener('click', () => document.getElementById('chatbotPanel').classList.remove('open'));
+
+/* ── Live branch data ────────────────────────────────────── */
+listenBranches(renderBranchCards);
+</script>
+</body>
+</html>

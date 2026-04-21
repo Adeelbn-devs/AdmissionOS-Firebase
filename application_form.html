@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diploma Admission Application | DACG Polytechnic</title>
+  <meta name="description" content="Apply online for Diploma Engineering admission at DACG Govt Polytechnic Chikkamagalur.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar-glass" id="mainNavbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand-text">
+      <img src="images/collage logo.jpg" alt="DACG">
+      D<span class="brand-accent">.</span>A<span class="brand-accent">.</span>C<span class="brand-accent">.</span>G Polytechnic
+    </a>
+    <div class="nav-links-group">
+      <a href="index.html"         class="nav-link-glass"><i class="fas fa-home"></i> Home</a>
+      <a href="seat_balances.html" class="nav-link-glass"><i class="fas fa-chair"></i> Seat Matrix</a>
+      <a href="admin.html"         class="nav-link-glass"><i class="fas fa-shield-halved"></i> Admin</a>
+    </div>
+  </div>
+</nav>
+
+<!-- UPLOAD OVERLAY -->
+<div class="upload-progress-overlay" id="uploadOverlay">
+  <div class="upload-spinner"></div>
+  <div id="uploadMessage" style="font-size:1.1rem;font-weight:700;letter-spacing:0.3px;">Uploading documents…</div>
+  <div style="color:rgba(255,255,255,0.4);font-size:0.83rem;">Please do not close this window</div>
+</div>
+
+<!-- FORM PAGE -->
+<div class="form-page">
+  <div class="wizard-card">
+
+    <!-- Header -->
+    <div class="wizard-header">
+      <h2><i class="fas fa-graduation-cap me-2"></i>Diploma Admission Application</h2>
+      <p>DACG Government Polytechnic Chikkamagalur &nbsp;·&nbsp; Complete all sections carefully</p>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="wizard-body" style="padding-bottom:0;">
+      <div class="step-indicator" id="stepIndicator">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-line"       id="line-1"></div>
+        <div class="step-dot"        id="dot-2">2</div>
+        <div class="step-line"       id="line-2"></div>
+        <div class="step-dot"        id="dot-3">3</div>
+        <div class="step-line"       id="line-3"></div>
+        <div class="step-dot"        id="dot-4">4</div>
+        <div class="step-line"       id="line-4"></div>
+        <div class="step-dot"        id="dot-5">5</div>
+      </div>
+      <p class="step-label-text" id="stepLabelText">
+        <span>Step 1 of 5</span> — Personal Details
+      </p>
+    </div>
+
+    <form id="admissionForm" novalidate>
+
+      <!-- Step 1: Personal Details -->
+      <div class="wizard-body wizard-step active" id="step-1">
+        <div class="step-section-title"><i class="fas fa-user"></i> Personal Details</div>
+        <div class="row g-3">
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">1. SATS Number <span class="text-danger">*</span></label>
+            <input id="sats_no" type="text" class="form-control-custom" placeholder="e.g. 2225001" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">2. Aadhar Number <span class="text-danger">*</span></label>
+            <input id="aadhar_no" type="text" class="form-control-custom" maxlength="12" placeholder="12-digit Aadhar" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">3. Full Name <span class="text-danger">*</span></label>
+            <input id="names" type="text" class="form-control-custom" placeholder="As per SSLC certificate" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">4. Date of Birth <span class="text-danger">*</span></label>
+            <input id="dob" type="date" class="form-control-custom" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">5. Mother's Name <span class="text-danger">*</span></label>
+            <input id="mother_name" type="text" class="form-control-custom" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">6. Father's Name <span class="text-danger">*</span></label>
+            <input id="father_name" type="text" class="form-control-custom" required>
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">7. Gender <span class="text-danger">*</span></label>
+            <select id="gender" class="form-control-custom" required>
+              <option value="">Select…</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">8. Religion <span class="text-danger">*</span></label>
+            <input id="religion" type="text" class="form-control-custom" placeholder="e.g. Hindu" required>
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">9. Indian Nationality <span class="text-danger">*</span></label>
+            <div class="radio-group-custom">
+              <label class="radio-label"><input type="radio" name="nationality" value="Yes" required> Yes</label>
+              <label class="radio-label"><input type="radio" name="nationality" value="No"> No</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Study & Quota Details -->
+      <div class="wizard-body wizard-step" id="step-2">
+        <div class="step-section-title"><i class="fas fa-school"></i> Study &amp; Quota Details</div>
+        <div class="row g-3">
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">10. Native State Code <span class="text-danger">*</span></label>
+            <input id="native_state" type="text" class="form-control-custom" placeholder="e.g. 29" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">11. Native District <span class="text-danger">*</span></label>
+            <input id="native_district" type="text" class="form-control-custom" placeholder="e.g. Chikkamagalur" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">12. State Appeared for SSLC <span class="text-danger">*</span></label>
+            <input id="state_appeared" type="text" class="form-control-custom" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">13. Years Studied in Karnataka</label>
+            <input id="years_studied" type="number" class="form-control-custom" min="0" max="15" placeholder="e.g. 10">
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">14. Rural Study (1–10th) <span class="text-danger">*</span></label>
+            <div class="radio-group-custom">
+              <label class="radio-label"><input type="radio" name="rural_study" value="Yes" required> Yes</label>
+              <label class="radio-label"><input type="radio" name="rural_study" value="No"> No</label>
+            </div>
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">15. Kannada Medium <span class="text-danger">*</span></label>
+            <div class="radio-group-custom">
+              <label class="radio-label"><input type="radio" name="kannada_medium" value="Yes" required> Yes</label>
+              <label class="radio-label"><input type="radio" name="kannada_medium" value="No"> No</label>
+            </div>
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">16. Claim 5-Year Exemption? <span class="text-danger">*</span></label>
+            <div class="radio-group-custom">
+              <label class="radio-label"><input type="radio" name="exemption_rule" value="Yes" required> Yes</label>
+              <label class="radio-label"><input type="radio" name="exemption_rule" value="No"> No</label>
+            </div>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">17. Exemption Clause Code</label>
+            <input id="clause_code" type="text" class="form-control-custom" placeholder="If exemption claimed">
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">18. Preferred Branch <span class="text-danger">*</span></label>
+            <select id="course_name" class="form-control-custom" required>
+              <option value="">Select Branch</option>
+              <option value="cs">Computer Science (CS)</option>
+              <option value="ec">Electronics &amp; Communication (EC)</option>
+              <option value="ee">Electrical &amp; Electronics (EE)</option>
+              <option value="me">Mechanical Engineering (ME)</option>
+              <option value="ce">Civil Engineering (CE)</option>
+              <option value="at">Automobile Engineering (AT)</option>
+            </select>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">19. Claim SNQ Quota? <span class="text-danger">*</span></label>
+            <div class="radio-group-custom">
+              <label class="radio-label"><input type="radio" name="snq_quota" value="Yes" required> Yes</label>
+              <label class="radio-label"><input type="radio" name="snq_quota" value="No"> No</label>
+            </div>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">20. Hyderabad-Karnataka Quota? <span class="text-danger">*</span></label>
+            <div class="radio-group-custom">
+              <label class="radio-label"><input type="radio" name="hyd_kar_quota" value="Yes" required> Yes</label>
+              <label class="radio-label"><input type="radio" name="hyd_kar_quota" value="No"> No</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Academic Marks -->
+      <div class="wizard-body wizard-step" id="step-3">
+        <div class="step-section-title"><i class="fas fa-chart-bar"></i> Educational &amp; Marks Details</div>
+        <div class="row g-3">
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">21. SSLC Register Number <span class="text-danger">*</span></label>
+            <input id="SSLC_Register" type="text" class="form-control-custom" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">22. Year of Passing <span class="text-danger">*</span></label>
+            <input id="Year_of_passing" type="number" class="form-control-custom" placeholder="e.g. 2024" min="2010" max="2030" required>
+          </div>
+          <div class="col-12 fg">
+            <label class="form-label-custom">23. Qualifying Examination <span class="text-danger">*</span></label>
+            <div class="radio-group-custom">
+              <label class="radio-label"><input type="radio" name="exam_type" value="SSLC" required> SSLC</label>
+              <label class="radio-label"><input type="radio" name="exam_type" value="CBSE"> CBSE</label>
+              <label class="radio-label"><input type="radio" name="exam_type" value="ICSE"> ICSE</label>
+              <label class="radio-label"><input type="radio" name="exam_type" value="Others"> Others</label>
+            </div>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">24. Institution Code</label>
+            <input id="institution_code" type="text" class="form-control-custom" placeholder="e.g. 110">
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">25. School / College Name</label>
+            <input id="college_name" type="text" class="form-control-custom">
+          </div>
+          <div class="col-md-3 fg">
+            <label class="form-label-custom">26. Total Marks (Max)</label>
+            <input id="total_marks" type="number" class="form-control-custom" value="626" readonly style="background:#f1f5f9;cursor:not-allowed;">
+          </div>
+          <div class="col-md-3 fg">
+            <label class="form-label-custom">Marks Obtained <span class="text-danger">*</span></label>
+            <input id="marks_obtained" type="number" class="form-control-custom" placeholder="e.g. 580" min="0" max="626" required>
+          </div>
+          <div class="col-md-3 fg">
+            <label class="form-label-custom">27. Science Marks <span class="text-danger">*</span></label>
+            <input id="science_marks" type="number" class="form-control-custom" placeholder="Out of 100" min="0" max="100" required>
+          </div>
+          <div class="col-md-3 fg">
+            <label class="form-label-custom">28. Maths Marks <span class="text-danger">*</span></label>
+            <input id="maths_marks" type="number" class="form-control-custom" placeholder="Out of 100" min="0" max="100" required>
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">Sci + Maths Total (Auto)</label>
+            <input id="science_math_total" type="number" class="form-control-custom" readonly
+              style="background:#eef2ff;color:var(--indigo-dark);font-weight:800;cursor:not-allowed;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Category, Contact & Address -->
+      <div class="wizard-body wizard-step" id="step-4">
+        <div class="step-section-title"><i class="fas fa-id-card"></i> Category, Contact &amp; Address</div>
+        <div class="row g-3">
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">29. Special Category</label>
+            <select id="special_category" class="form-control-custom">
+              <option value="">None / Not Applicable</option>
+              <option value="NCC">NCC</option><option value="JTS">JTS</option><option value="JOC">JOC</option>
+              <option value="EDP">EDP</option><option value="DP">DP</option><option value="PS">PS</option>
+              <option value="SP">SP</option><option value="AI">AI</option><option value="CI">CI</option>
+              <option value="HK">HK</option><option value="GK">GK</option><option value="ITI">ITI</option>
+              <option value="SG">SG</option><option value="PH">PH</option>
+            </select>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">30. Reserved Category Code</label>
+            <input id="reserved_category" type="text" class="form-control-custom" placeholder="e.g. 2a, SC, ST, OBC">
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">31. Caste Name</label>
+            <input id="caste_name" type="text" class="form-control-custom">
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">32. Annual Family Income (₹)</label>
+            <input id="annual_income" type="number" class="form-control-custom" placeholder="e.g. 150000">
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">33. PIN Code <span class="text-danger">*</span></label>
+            <input id="pincode" type="text" class="form-control-custom" maxlength="6" placeholder="6-digit PIN" required>
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">34. Student Mobile <span class="text-danger">*</span></label>
+            <input id="mobile" type="tel" class="form-control-custom" maxlength="10" placeholder="10-digit number" required>
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">35. Parent Mobile</label>
+            <input id="parent_mobile" type="tel" class="form-control-custom" maxlength="10" placeholder="10-digit number">
+          </div>
+          <div class="col-md-4 fg">
+            <label class="form-label-custom">36. Email Address</label>
+            <input id="email" type="email" class="form-control-custom" placeholder="student@email.com">
+          </div>
+          <div class="col-12 fg">
+            <label class="form-label-custom">37. Residential Address <span class="text-danger">*</span></label>
+            <textarea id="address" class="form-control-custom" rows="3" placeholder="Full address with taluk and district" required style="resize:vertical;"></textarea>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">38. Candidate Signature (Name)</label>
+            <input id="signature_candidate" type="text" class="form-control-custom" placeholder="Type full name as signature">
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">39. Parent/Guardian Signature</label>
+            <input id="signature_parent" type="text" class="form-control-custom" placeholder="Parent's full name">
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">40. Submission Date</label>
+            <input id="submission_date" type="date" class="form-control-custom">
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5: Document Uploads -->
+      <div class="wizard-body wizard-step" id="step-5">
+        <div class="step-section-title"><i class="fas fa-upload"></i> Document Uploads</div>
+        <p style="color:#64748b;font-size:0.83rem;margin-bottom:1.5rem;">
+          Upload clear scanned copies (JPG, PNG, PDF — max 5 MB each). Fields marked <span class="text-danger fw-bold">*</span> are mandatory.
+        </p>
+        <div class="row g-3">
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">41. SSLC Marks Card <span class="text-danger">*</span></label>
+            <input id="sslc_marks_card" type="file" class="file-upload-custom" accept=".jpg,.jpeg,.png,.pdf" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">42. Student Photo <span class="text-danger">*</span></label>
+            <input id="student_photo" type="file" class="file-upload-custom" accept=".jpg,.jpeg,.png" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">43. Transfer Certificate <span class="text-danger">*</span></label>
+            <input id="tc" type="file" class="file-upload-custom" accept=".jpg,.jpeg,.png,.pdf" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">44. Caste Certificate <span class="text-danger">*</span></label>
+            <input id="caste_certificate" type="file" class="file-upload-custom" accept=".jpg,.jpeg,.png,.pdf" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">45. Income Certificate <span class="text-danger">*</span></label>
+            <input id="income_certificate" type="file" class="file-upload-custom" accept=".jpg,.jpeg,.png,.pdf" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">46. Study Certificate <span class="text-danger">*</span></label>
+            <input id="study_certificate" type="file" class="file-upload-custom" accept=".jpg,.jpeg,.png,.pdf" required>
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">47. Kannada Medium Certificate</label>
+            <input id="kannada_medium_certificate" type="file" class="file-upload-custom" accept=".jpg,.jpeg,.png,.pdf">
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">48. Rural Quota Certificate</label>
+            <input id="rural_quota_certificate" type="file" class="file-upload-custom" accept=".jpg,.jpeg,.png,.pdf">
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">49. Special Quota Certificate</label>
+            <input id="special_quota_certificate" type="file" class="file-upload-custom" accept=".jpg,.jpeg,.png,.pdf">
+          </div>
+          <div class="col-md-6 fg">
+            <label class="form-label-custom">50. Aadhar Card <span class="text-danger">*</span></label>
+            <input id="aadhar_card" type="file" class="file-upload-custom" accept=".jpg,.jpeg,.png,.pdf" required>
+          </div>
+        </div>
+
+        <!-- Declaration -->
+        <div class="declaration-box mt-4">
+          <h6><i class="fas fa-shield-check me-2"></i>Declaration</h6>
+          <p>I hereby declare that all information provided is true and correct. I understand that any false information may result in cancellation of my admission.</p>
+          <label class="radio-label" style="gap:12px;align-items:flex-start;border:none;padding:0;">
+            <input type="checkbox" id="declaration" required style="margin-top:3px;width:16px;height:16px;accent-color:var(--indigo);">
+            <span style="font-size:0.87rem;font-weight:600;color:#1e293b;">I agree to the above declaration</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- WIZARD FOOTER -->
+      <div class="wizard-footer">
+        <button type="button" id="btnPrev" onclick="changeStep(-1)" style="display:none;"
+          class="btn btn-outline-secondary fw-bold d-flex align-items-center gap-2">
+          <i class="fas fa-arrow-left fa-xs"></i> Previous
+        </button>
+        <div id="stepInfoText" style="font-size:0.8rem;color:#94a3b8;font-weight:600;">Step 1 of 5</div>
+        <button type="button" id="btnNext"  onclick="changeStep(1)"
+          class="btn-primary-glow" style="border-radius:12px;padding:12px 32px;">
+          Next <i class="fas fa-arrow-right fa-xs"></i>
+        </button>
+        <button type="submit" id="btnSubmit" style="display:none;"
+          class="btn-primary-glow" style="border-radius:12px;padding:12px 36px;">
+          <i class="fas fa-paper-plane"></i> Submit Application
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background:#0f172a;border:1px solid rgba(99,102,241,0.3);border-radius:20px;overflow:hidden;">
+      <div class="modal-body text-center p-5">
+        <div style="font-size:3.5rem;margin-bottom:1rem;animation:fadeInUp 0.5s both;">🎉</div>
+        <h4 style="color:#fff;font-weight:800;margin-bottom:0.5rem;">Application Submitted!</h4>
+        <p style="color:#64748b;font-size:0.9rem;margin-bottom:1.5rem;">
+          Your application has been saved to Firestore.<br>
+          The admin team will review your documents within 2–3 working days.
+        </p>
+        <div class="p-3 rounded-3 mb-4" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);">
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#a5b4fc;margin-bottom:6px;">Application ID</div>
+          <div id="successAppId" style="font-family:monospace;font-size:0.88rem;color:#818cf8;word-break:break-all;"></div>
+        </div>
+        <a href="index.html" class="btn-primary-glow"><i class="fas fa-home"></i> Back to Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Chatbot FAB -->
+<div id="ai-chatbot-fab">
+  <div class="fab-btn" id="fabToggle">🤖</div>
+  <span class="fab-label">Student AI Assistant</span>
+</div>
+<div class="chatbot-panel" id="chatbotPanel">
+  <div class="chatbot-header">
+    <div class="chatbot-header-info"><div class="chatbot-avatar">🤖</div><div><h6>Student AI Assistant</h6><p>Powered by Claude AI</p></div></div>
+    <button class="chatbot-close" id="chatbotClose">&times;</button>
+  </div>
+  <div class="chatbot-body"><div>
+    <div style="font-size:2.5rem;margin-bottom:12px;">🚀</div>
+    <p style="color:rgba(255,255,255,0.4);font-size:0.84rem;">Ask about admissions, branches, eligibility…</p>
+  </div></div>
+  <div class="chatbot-footer">
+    <div class="chatbot-input-row">
+      <input class="chatbot-input" placeholder="Ask anything…" disabled>
+      <button class="chatbot-send" disabled>➤</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="firebase_config.js"></script>
+<script src="firebase_service.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// handle multi-step form state
+let currentStep = 1;
+const TOTAL_STEPS = 5;
+const STEP_LABELS = ['Personal Details','Study & Quota Details','Educational & Marks','Category & Contact','Document Uploads'];
+
+// auto-calculate science + maths total
+['science_marks','maths_marks'].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', () => {
+    const s = +document.getElementById('science_marks').value||0;
+    const m = +document.getElementById('maths_marks').value||0;
+    document.getElementById('science_math_total').value = s + m;
+  });
+});
+
+// set default submission date to today
+document.getElementById('submission_date').value = new Date().toISOString().split('T')[0];
+
+// toggle navbar shrink on scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNavbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// navigate between wizard steps
+function changeStep(dir) {
+  if (dir === 1 && !validateStep()) return;
+  document.getElementById(`step-${currentStep}`).classList.remove('active');
+  currentStep = Math.max(1, Math.min(TOTAL_STEPS, currentStep + dir));
+  document.getElementById(`step-${currentStep}`).classList.add('active');
+  syncStepUI();
+}
+
+function syncStepUI() {
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const dot = document.getElementById(`dot-${i}`);
+    dot.className = 'step-dot';
+    if (i < currentStep)  { dot.classList.add('completed'); dot.innerHTML = '<i class="fas fa-check fa-xs"></i>'; }
+    else if (i === currentStep) { dot.classList.add('active'); dot.textContent = i; }
+    else { dot.textContent = i; }
+    if (i < TOTAL_STEPS) {
+      document.getElementById(`line-${i}`).className = 'step-line' + (i < currentStep ? ' completed' : '');
+    }
+  }
+  document.getElementById('stepLabelText').innerHTML = `<span>Step ${currentStep} of ${TOTAL_STEPS}</span> — ${STEP_LABELS[currentStep-1]}`;
+  document.getElementById('stepInfoText').textContent = `Step ${currentStep} of ${TOTAL_STEPS}`;
+  document.getElementById('btnPrev').style.display   = currentStep === 1 ? 'none' : 'inline-flex';
+  document.getElementById('btnNext').style.display   = currentStep === TOTAL_STEPS ? 'none' : 'inline-flex';
+  document.getElementById('btnSubmit').style.display = currentStep === TOTAL_STEPS ? 'inline-flex' : 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// validate required fields per step
+function validateStep() {
+  const step = document.getElementById(`step-${currentStep}`);
+  step.classList.add('was-validated');
+  const fields = step.querySelectorAll('[required]');
+  let ok = true;
+  fields.forEach(el => {
+    if (el.type === 'radio') {
+      const group = [...step.querySelectorAll(`[name="${el.name}"]`)];
+      if (!group.some(r => r.checked)) ok = false;
+    } else if (el.type === 'checkbox') {
+      if (!el.checked) ok = false;
+    } else if (!el.value.trim()) {
+      ok = false;
+    }
+  });
+  if (!ok) showToast('error', 'Incomplete', 'Please fill all required fields in this step.');
+  return ok;
+}
+
+// handle final form submission
+document.getElementById('admissionForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!document.getElementById('declaration').checked) {
+    showToast('error','Declaration Required','Please agree to the declaration before submitting.'); return;
+  }
+
+  const overlay = document.getElementById('uploadOverlay');
+  overlay.classList.add('show');
+
+  const formData = {
+    sats_no: getInputValue('sats_no'), aadhar_no: getInputValue('aadhar_no'), names: getInputValue('names'), dob: getInputValue('dob'),
+    mother_name: getInputValue('mother_name'), father_name: getInputValue('father_name'), gender: getInputValue('gender'),
+    religion: getInputValue('religion'), nationality: getRadioValue('nationality'), native_state: getInputValue('native_state'),
+    native_district: getInputValue('native_district'), state_appeared: getInputValue('state_appeared'),
+    years_studied: getInputValue('years_studied'), rural_study: getRadioValue('rural_study'),
+    kannada_medium: getRadioValue('kannada_medium'), exemption_rule: getRadioValue('exemption_rule'),
+    clause_code: getInputValue('clause_code'), snq_quota: getRadioValue('snq_quota'),
+    hyd_kar_quota: getRadioValue('hyd_kar_quota'), special_category: getInputValue('special_category'),
+    reserved_category: getInputValue('reserved_category'), caste_name: getInputValue('caste_name'),
+    annual_income: getInputValue('annual_income'), total_marks: getInputValue('total_marks'),
+    marks_obtained: getInputValue('marks_obtained'), science_marks: getInputValue('science_marks'),
+    maths_marks: getInputValue('maths_marks'), science_math_total: getInputValue('science_math_total'),
+    mobile: getInputValue('mobile'), parent_mobile: getInputValue('parent_mobile'), email: getInputValue('email'),
+    address: getInputValue('address'), course_name: getInputValue('course_name'),
+    SSLC_Register: getInputValue('SSLC_Register'), institution_code: getInputValue('institution_code'),
+    college_name: getInputValue('college_name'), signature_candidate: getInputValue('signature_candidate'),
+    signature_parent: getInputValue('signature_parent'), submission_date: getInputValue('submission_date'),
+    Year_of_passing: getInputValue('Year_of_passing'), pincode: getInputValue('pincode'), exam_type: getRadioValue('exam_type'),
+  };
+
+  const fileIds = ['sslc_marks_card','tc','caste_certificate','income_certificate',
+    'study_certificate','kannada_medium_certificate','rural_quota_certificate',
+    'special_quota_certificate','aadhar_card','student_photo'];
+  const files = {};
+  fileIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el?.files[0]) files[id] = el.files[0];
+  });
+
+  try {
+    const docId = await submitApplication(formData, files, msg => {
+      document.getElementById('uploadMessage').textContent = msg;
+    });
+    overlay.classList.remove('show');
+    document.getElementById('successAppId').textContent = docId;
+    new bootstrap.Modal(document.getElementById('successModal')).show();
+  } catch(err) {
+    overlay.classList.remove('show');
+    alert('Oops! Something went wrong submitting your application. Please check your internet connection and try again.');
+  }
+});
+
+// utility functions
+const getInputValue = id => document.getElementById(id)?.value?.trim() || '';
+const getRadioValue = name => document.querySelector(`[name="${name}"]:checked`)?.value || '';
+
+function showToast(type, title, msg) {
+  const icons = { success:'✅', error:'❌', info:'ℹ️' };
+  const t = document.createElement('div');
+  t.className = `toast-custom ${type}`;
+  t.innerHTML = `<div class="toast-icon">${icons[type]||'📢'}</div><div><div class="toast-title">${title}</div><div class="toast-msg">${msg}</div></div>`;
+  document.getElementById('toastContainer').prepend(t);
+  setTimeout(() => t.remove(), 5000);
+}
+
+// init ai chatbot fab
+document.getElementById('fabToggle').addEventListener('click',   () => document.getElementById('chatbotPanel').classList.toggle('open'));
+document.getElementById('chatbotClose').addEventListener('click', () => document.getElementById('chatbotPanel').classList.remove('open'));
+</script>
+</body>
+</html>

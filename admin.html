@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | DACG Admission System</title>
+  <meta name="description" content="Admin panel to manage applications, verify documents, and allot seats — DACG Diploma Admissions.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .admin-sidebar { font-size: 0.875rem; }
+    .mobile-nav-tabs {
+      display: none;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    @media(max-width:992px){ .mobile-nav-tabs { display: flex; } .admin-sidebar { display:none; } }
+
+    .info-strip {
+      background: rgba(99,102,241,0.08);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: var(--r-md);
+      padding: 16px 20px;
+    }
+    .info-strip-label { font-size:0.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary); }
+    .info-strip-val   { font-size:0.95rem;font-weight:700;color:var(--text-primary);margin-top:3px; }
+
+    .admin-table { width:100%;border-collapse:collapse; }
+    .admin-table th {
+      background: rgba(255,255,255,0.03);
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 12px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .admin-table th:first-child { text-align:left; }
+    .admin-table td {
+      padding: 14px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      transition: background 0.15s;
+    }
+    .admin-table td:first-child { text-align:left; }
+    .admin-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .admin-table tr:last-child td { border-bottom: none; }
+
+    .tab-mini-btn {
+      font-size:0.8rem;
+      font-weight:700;
+      padding:8px 16px;
+      border-radius:var(--r-sm);
+      border:1px solid rgba(255,255,255,0.1);
+      background:rgba(255,255,255,0.05);
+      color:rgba(255,255,255,0.6);
+      cursor:pointer;
+      transition:var(--transition-fast);
+    }
+    .tab-mini-btn.active,
+    .tab-mini-btn:hover {
+      background:rgba(99,102,241,0.2);
+      border-color:rgba(99,102,241,0.4);
+      color:#fff;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar-glass">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand-text">
+      <img src="images/collage logo.jpg" alt="DACG">
+      D<span class="brand-accent">.</span>A<span class="brand-accent">.</span>C<span class="brand-accent">.</span>G &nbsp;<span style="color:rgba(255,255,255,0.4);font-weight:400;">Admin</span>
+    </a>
+    <div class="d-flex align-items-center gap-3">
+      <span class="live-badge"><span class="live-dot"></span> Live</span>
+      <a href="index.html" class="nav-link-glass" style="font-size:0.82rem;"><i class="fas fa-arrow-left"></i> Public Site</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ADMIN LAYOUT -->
+<div class="admin-page">
+  <div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-title">Dashboard</div>
+      <a class="admin-nav-link active" id="nav-applicants"   onclick="showTab('applicants',this)"><i class="fas fa-users fa-fw"></i>Applicants</a>
+      <a class="admin-nav-link"        id="nav-docverify"    onclick="showTab('docverify',this)"><i class="fas fa-file-shield fa-fw"></i>Doc Verification</a>
+      <a class="admin-nav-link"        id="nav-allotment"    onclick="showTab('allotment',this)"><i class="fas fa-person-booth fa-fw"></i>Seat Allotment</a>
+      <a class="admin-nav-link"        id="nav-seatmatrix"   onclick="showTab('seatmatrix',this)"><i class="fas fa-table fa-fw"></i>Seat Matrix</a>
+      <a class="admin-nav-link"        id="nav-allotmentlist" onclick="showTab('allotmentlist',this)"><i class="fas fa-list-check fa-fw"></i>Allotment List</a>
+      <hr class="admin-sidebar-divider">
+      <a class="admin-nav-link" href="seat_balances.html" target="_blank"><i class="fas fa-external-link fa-fw"></i>Public Seat Page</a>
+      <a class="admin-nav-link" href="seed_firestore.html" target="_blank"><i class="fas fa-seedling fa-fw"></i>Seed Firestore</a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-content">
+
+      <!-- Mobile tab pills -->
+      <div class="mobile-nav-tabs">
+        <button class="tab-mini-btn active" onclick="showTab('applicants',this)"><i class="fas fa-users me-1"></i>Applicants</button>
+        <button class="tab-mini-btn" onclick="showTab('docverify',this)"><i class="fas fa-file-shield me-1"></i>Verify Docs</button>
+        <button class="tab-mini-btn" onclick="showTab('allotment',this)"><i class="fas fa-person-booth me-1"></i>Allot Seat</button>
+        <button class="tab-mini-btn" onclick="showTab('seatmatrix',this)"><i class="fas fa-table me-1"></i>Seat Matrix</button>
+        <button class="tab-mini-btn" onclick="showTab('allotmentlist',this)"><i class="fas fa-list-check me-1"></i>Allotments</button>
+      </div>
+
+      <!-- TAB 1 — APPLICANTS -->
+      <div class="admin-tab-pane active" id="tab-applicants">
+        <div class="tab-card mb-4">
+          <div class="tab-card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <h4><i class="fas fa-users"></i> All Applicants</h4>
+            <div class="d-flex gap-2">
+              <input type="text" class="admin-search" id="searchInput"
+                placeholder="Search name, SSLC…" style="width:220px;" oninput="filterApplicants()">
+              <button class="btn-ghost" style="font-size:0.82rem;" onclick="loadApplicants()">
+                <i class="fas fa-rotate-right"></i>
+              </button>
+            </div>
+          </div>
+          <div id="apLoading" class="text-center py-5" style="color:#64748b;">
+            <div class="loading-spinner" style="margin:0 auto 14px;width:32px;height:32px;border-width:3px;"></div>
+            <p style="font-size:0.85rem;">Loading applicants…</p>
+          </div>
+          <div id="apList" style="display:none;max-height:480px;overflow-y:auto;"></div>
+        </div>
+
+        <!-- Student detail panel -->
+        <div class="tab-card" id="studentDetailPanel" style="display:none;">
+          <div class="tab-card-header d-flex align-items-center justify-content-between">
+            <h4><i class="fas fa-id-card"></i> Student Details</h4>
+            <button class="btn-ghost" style="font-size:0.8rem;" onclick="document.getElementById('studentDetailPanel').style.display='none'">
+              <i class="fas fa-times"></i> Close
+            </button>
+          </div>
+          <div class="tab-card-body">
+            <div class="detail-grid mb-4" id="studentInfoGrid"></div>
+            <h6 style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-secondary);margin-bottom:10px;">
+              <i class="fas fa-folder-open me-2" style="color:var(--indigo-light);"></i>Uploaded Documents
+            </h6>
+            <div class="doc-link-list" id="studentDocLinks"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2 — DOCUMENT VERIFICATION -->
+      <div class="admin-tab-pane" id="tab-docverify">
+        <div class="tab-card mb-4">
+          <div class="tab-card-header">
+            <h4><i class="fas fa-file-shield"></i> Document Verification</h4>
+          </div>
+          <div class="tab-card-body">
+            <!-- Search row -->
+            <div class="d-flex gap-2 mb-4 flex-wrap">
+              <input class="admin-search" id="dvSearch" placeholder="SSLC Register Number…" style="width:280px;"
+                onkeydown="if(event.key==='Enter')findStudentForDV()">
+              <button class="btn-accent" onclick="findStudentForDV()"><i class="fas fa-search me-1"></i>Find Student</button>
+            </div>
+
+            <div id="dvError" class="alert alert-danger d-none rounded-3" role="alert"></div>
+
+            <!-- Student section -->
+            <div id="dvSection" style="display:none;">
+              <!-- Info strip -->
+              <div class="row g-3 mb-4" id="dvInfoStrip"></div>
+
+              <!-- Doc links -->
+              <h6 class="admin-label mb-2">Uploaded Documents</h6>
+              <div class="doc-link-list mb-4" id="dvDocLinks"></div>
+
+              <!-- Checklist -->
+              <h6 class="admin-label mb-2">Verification Checklist</h6>
+              <div id="dvChecklist" class="mb-4"></div>
+
+              <!-- CLAUDE AI SECTION -->
+              <div class="claude-ai-section mb-4">
+                <div class="d-flex align-items-start gap-3 flex-wrap mb-3">
+                  <div style="font-size:2rem;">🤖</div>
+                  <div>
+                    <div class="claude-ai-title">AI-Powered Document Verification</div>
+                    <div class="claude-ai-desc">Claude Vision AI analyzes all uploaded documents for authenticity, completeness &amp; readability in seconds</div>
+                  </div>
+                </div>
+                <button class="btn-claude" id="btnClaude" onclick="runClaudeAI()">
+                  <i class="fas fa-robot"></i> Verify Documents via Claude AI (Vision)
+                </button>
+                <div class="claude-result-box" id="claudeResult">
+                  <h5>✅ Documents Verified by Claude AI</h5>
+                  <ul id="claudeResultList"></ul>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="d-flex gap-2 flex-wrap">
+                <button class="btn-accent" onclick="saveVerification()"><i class="fas fa-save me-1"></i>Save Verification</button>
+                <button class="btn-ghost" onclick="resetDV()"><i class="fas fa-times me-1"></i>Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3 — SEAT ALLOTMENT -->
+      <div class="admin-tab-pane" id="tab-allotment">
+        <div class="tab-card">
+          <div class="tab-card-header">
+            <h4><i class="fas fa-person-booth"></i> Seat Allotment</h4>
+          </div>
+          <div class="tab-card-body">
+            <!-- Search -->
+            <div class="d-flex gap-2 mb-4 flex-wrap">
+              <input class="admin-search" id="saSearch" placeholder="SSLC Register Number…" style="width:280px;"
+                onkeydown="if(event.key==='Enter')findStudentForSA()">
+              <button class="btn-accent" onclick="findStudentForSA()"><i class="fas fa-search me-1"></i>Find Student</button>
+            </div>
+
+            <div id="saError"   class="alert alert-danger d-none rounded-3" role="alert"></div>
+            <div id="saSuccess" class="alert d-none rounded-3" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;"></div>
+
+            <div id="saSection" style="display:none;">
+              <!-- Info strip -->
+              <div class="row g-3 mb-4" id="saInfoStrip"></div>
+
+              <!-- Allotment form -->
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="admin-label">Branch to Allot <span class="text-danger">*</span></label>
+                  <select id="saBranch" class="admin-form-control">
+                    <option value="">Select Branch…</option>
+                    <option value="CS">Computer Science (CS)</option>
+                    <option value="EC">Electronics &amp; Communication (EC)</option>
+                    <option value="EE">Electrical &amp; Electronics (EE)</option>
+                    <option value="ME">Mechanical Engineering (ME)</option>
+                    <option value="CE">Civil Engineering (CE)</option>
+                    <option value="AT">Automobile Engineering (AT)</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="admin-label">Allocated Category <span class="text-danger">*</span></label>
+                  <input id="saCategory" type="text" class="admin-form-control" placeholder="e.g. 2a, GM, SC, OBC">
+                </div>
+                <div class="col-md-6">
+                  <label class="admin-label">Fees Amount <span class="text-danger">*</span></label>
+                  <select id="saFees" class="admin-form-control">
+                    <option value="">Select…</option>
+                    <option value="4160">₹4,160 — Government / SNQ Quota</option>
+                    <option value="1260">₹1,260 — Donor Quota</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="admin-label">Fee Receipt Number <span class="text-danger">*</span></label>
+                  <input id="saReceipt" type="text" class="admin-form-control" placeholder="Fee receipt / challan no.">
+                </div>
+              </div>
+
+              <button class="btn-primary-glow" id="btnAllot" onclick="doAllotment()">
+                <i class="fas fa-check-circle"></i> Allot Seat via Firestore Transaction
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4 — SEAT MATRIX -->
+      <div class="admin-tab-pane" id="tab-seatmatrix">
+        <div class="tab-card">
+          <div class="tab-card-header d-flex align-items-center justify-content-between">
+            <h4><i class="fas fa-table"></i> Live Seat Matrix</h4>
+            <span class="live-badge"><span class="live-dot"></span>Live</span>
+          </div>
+          <div id="smLoading" class="text-center py-5" style="color:#64748b;">
+            <div class="loading-spinner" style="margin:0 auto 14px;width:32px;height:32px;border-width:3px;"></div>
+          </div>
+          <div id="smWrap" style="display:none;overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Branch</th>
+                  <th>Government</th>
+                  <th>Donor</th>
+                  <th>SNQ</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="smBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5 — ALLOTMENT LIST -->
+      <div class="admin-tab-pane" id="tab-allotmentlist">
+        <div class="tab-card">
+          <div class="tab-card-header d-flex align-items-center justify-content-between">
+            <h4><i class="fas fa-list-check"></i> Seat Allotment Records</h4>
+            <button class="btn-ghost" style="font-size:0.82rem;" onclick="loadAllotments()">
+              <i class="fas fa-rotate-right"></i> Refresh
+            </button>
+          </div>
+          <div id="alLoading" class="text-center py-5" style="color:#64748b;">
+            <div class="loading-spinner" style="margin:0 auto 14px;width:32px;height:32px;border-width:3px;"></div>
+          </div>
+          <div id="alList" style="display:none;max-height:500px;overflow-y:auto;"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Chatbot FAB -->
+<div id="ai-chatbot-fab">
+  <div class="fab-btn" id="fabToggle">🤖</div>
+  <span class="fab-label">Student AI Assistant</span>
+</div>
+<div class="chatbot-panel" id="chatbotPanel">
+  <div class="chatbot-header">
+    <div class="chatbot-header-info"><div class="chatbot-avatar">🤖</div><div><h6>Student AI Assistant</h6><p>Claude AI · Coming soon</p></div></div>
+    <button class="chatbot-close" id="chatbotClose">&times;</button>
+  </div>
+  <div class="chatbot-body"><div>
+    <div style="font-size:2.5rem;margin-bottom:12px;">🛡️</div>
+    <p style="color:rgba(255,255,255,0.4);font-size:0.84rem;">Admin AI assistance coming soon…</p>
+  </div></div>
+  <div class="chatbot-footer">
+    <div class="chatbot-input-row">
+      <input class="chatbot-input" disabled placeholder="Coming soon…">
+      <button class="chatbot-send" disabled>➤</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="firebase_config.js"></script>
+<script src="firebase_service.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// constants
+const BRANCH_NAMES = {
+  CS:'Computer Science',EC:'Electronics & Comm.',
+  EE:'Electrical & Electronics','E&E':'Electrical & Electronics',
+  ME:'Mechanical Engineering',CE:'Civil Engineering',AT:'Automobile Engineering'
+};
+const DOC_LABELS = {
+  sslc_marks_card:'SSLC Marks Card',tc:'Transfer Certificate',
+  caste_certificate:'Caste Certificate',income_certificate:'Income Certificate',
+  study_certificate:'Study Certificate',
+  kannada_medium_certificate:'Kannada Medium Cert.',
+  rural_quota_certificate:'Rural Quota Cert.',
+  special_quota_certificate:'Special Quota Cert.',
+  aadhar_card:'Aadhar Card',student_photo:'Student Photo'
+};
+
+let allApplicants = [], dvStudent = null, dvVerifyId = null, saStudent = null;
+
+// handles tab switching across the admin panel
+function showTab(id, el) {
+  document.querySelectorAll('.admin-tab-pane').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-link, .tab-mini-btn').forEach(l => l.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if (el) el.classList.add('active');
+  const navEl = document.getElementById('nav-'+id);
+  if (navEl) navEl.classList.add('active');
+  if (id === 'applicants')    loadApplicants();
+  if (id === 'seatmatrix')    loadSeatMatrix();
+  if (id === 'allotmentlist') loadAllotments();
+}
+
+// generic toast notifications
+function showToast(type, title, msg) {
+  const icons = { success:'✅', error:'❌', info:'ℹ️', warning:'⚠️' };
+  const t = document.createElement('div');
+  t.className = `toast-custom ${type}`;
+  t.innerHTML = `<div class="toast-icon">${icons[type]||'📢'}</div><div><div class="toast-title">${title}</div><div class="toast-msg">${msg}</div></div>`;
+  document.getElementById('toastContainer').prepend(t);
+  setTimeout(() => t.remove(), 5000);
+}
+
+// dynamically build the info strip for student details
+function buildInfoStrip(containerId, fields) {
+  document.getElementById(containerId).innerHTML = fields.map(([label, val]) => `
+    <div class="col-6 col-md-3">
+      <div class="info-strip">
+        <div class="info-strip-label">${label}</div>
+        <div class="info-strip-val">${val || '—'}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ========= Tab 1: Applicants ========= //
+async function loadApplicants() {
+  document.getElementById('apLoading').style.display = 'block';
+  document.getElementById('apList').style.display   = 'none';
+  try {
+    allApplicants = await getAllStudents();
+    renderApplicants(allApplicants);
+  } catch(e) {
+    document.getElementById('apLoading').innerHTML = `<p style="color:#f87171;font-size:0.85rem;">Failed to load: ${e.message}</p>`;
+  }
+}
+
+function renderApplicants(list) {
+  document.getElementById('apLoading').style.display = 'none';
+  const el = document.getElementById('apList');
+  el.style.display = 'block';
+  if (!list.length) {
+    el.innerHTML = `<div class="text-center py-5" style="color:#64748b;font-size:0.85rem;">No applicants found.</div>`;
+    return;
+  }
+  el.innerHTML = list.map(s => `
+    <div class="applicant-row" onclick="viewStudent(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+      <div>
+        <div class="applicant-name">${s.names || 'Unknown'}</div>
+        <div class="applicant-meta">
+          SSLC: ${s.SSLC_Register||'—'} &nbsp;·&nbsp;
+          ${(s.course_name||'—').toUpperCase()} &nbsp;·&nbsp;
+          ${s.mobile||'—'}
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="status-badge status-${s.status||'pending'}">${s.status||'pending'}</span>
+        <i class="fas fa-chevron-right" style="color:#334155;font-size:0.75rem;"></i>
+      </div>
+    </div>`).join('');
+}
+
+function filterApplicants() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  renderApplicants(allApplicants.filter(s =>
+    (s.names||'').toLowerCase().includes(q) ||
+    (s.SSLC_Register||'').toLowerCase().includes(q) ||
+    (s.mobile||'').includes(q)
+  ));
+}
+
+function viewStudent(s) {
+  document.getElementById('studentDetailPanel').style.display = 'block';
+  buildInfoStrip('studentInfoGrid', [
+    ['Full Name', s.names], ['SSLC Register', s.SSLC_Register],
+    ['Date of Birth', s.dob], ['Gender', s.gender],
+    ['Mobile', s.mobile], ['Email', s.email],
+    ['Father Name', s.father_name], ['Mother Name', s.mother_name],
+    ['Branch Preferred', (s.course_name||'').toUpperCase()], ['Marks', s.marks_obtained],
+    ['Science', s.science_marks], ['Maths', s.maths_marks],
+    ['Reserved Category', s.reserved_category], ['Caste', s.caste_name],
+    ['Annual Income', s.annual_income ? '₹'+s.annual_income : '—'],
+    ['Rural Study', s.rural_study], ['Kannada Medium', s.kannada_medium],
+    ['SNQ Quota', s.snq_quota], ['Address', s.address], ['Pincode', s.pincode],
+  ]);
+  document.getElementById('studentDocLinks').innerHTML = Object.entries(DOC_LABELS).map(([key, label]) => {
+    const url = s[key];
+    return url
+      ? `<a href="${url}" target="_blank" class="doc-thumb-link"><i class="fas fa-file-alt"></i>${label}</a>`
+      : `<span class="doc-thumb-link" style="border-color:rgba(239,68,68,0.2);color:#f87171;background:rgba(239,68,68,0.06);">
+           <i class="fas fa-times-circle"></i>${label}
+         </span>`;
+  }).join('');
+  document.getElementById('studentDetailPanel').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ========= Tab 2: Document Verification ========= //
+async function findStudentForDV() {
+  const sslc = document.getElementById('dvSearch').value.trim();
+  if (!sslc) { showToast('info','Required','Enter SSLC Register Number.'); return; }
+  document.getElementById('dvError').classList.add('d-none');
+  document.getElementById('dvSection').style.display = 'none';
+  try {
+    const student = await searchStudentBySSLC(sslc);
+    if (!student) {
+      document.getElementById('dvError').textContent = `No student with SSLC: ${sslc}`;
+      document.getElementById('dvError').classList.remove('d-none'); return;
+    }
+    dvStudent = student;
+    buildInfoStrip('dvInfoStrip', [
+      ['SSLC Register', student.SSLC_Register], ['Student Name', student.names],
+      ['Marks Obtained', student.marks_obtained],
+      ['Status', `<span class="status-badge status-${student.status||'pending'}">${student.status||'pending'}</span>`],
+    ]);
+    document.getElementById('dvDocLinks').innerHTML = Object.entries(DOC_LABELS).map(([key, label]) => {
+      const url = student[key];
+      return url
+        ? `<a href="${url}" target="_blank" class="doc-thumb-link"><i class="fas fa-eye"></i>${label}</a>`
+        : `<span class="doc-thumb-link" style="border-color:rgba(239,68,68,0.2);color:#f87171;background:rgba(239,68,68,0.06);">
+             <i class="fas fa-times-circle"></i>${label}
+           </span>`;
+    }).join('');
+    const existing = await getDocumentVerification(sslc);
+    dvVerifyId = existing ? existing.id : null;
+    document.getElementById('dvChecklist').innerHTML = Object.entries(DOC_LABELS).map(([key, label]) => `
+      <div class="doc-item">
+        <span class="doc-item-label"><i class="fas fa-file-circle-check"></i>${label}</span>
+        <div class="doc-radio-group">
+          <label class="doc-radio-label">
+            <input type="radio" name="dv_${key}" value="Yes" ${existing?.[key]==='Yes'?'checked':''}> ✅ Yes
+          </label>
+          <label class="doc-radio-label">
+            <input type="radio" name="dv_${key}" value="No" ${existing?.[key]==='No'?'checked':''}> ❌ No
+          </label>
+        </div>
+      </div>`).join('');
+    document.getElementById('claudeResult').classList.remove('show');
+    document.getElementById('dvSection').style.display = 'block';
+  } catch(e) { showToast('error','Error', e.message); }
+}
+
+async function runClaudeAI() {
+  // TODO: Connect Claude API later
+  const btn = document.getElementById('btnClaude');
+  const result = document.getElementById('claudeResult');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner me-2" style="width:16px;height:16px;border-width:2px;border-top-color:#fff;"></span>Analyzing with Claude Vision…';
+  result.classList.remove('show');
+  try {
+    const res = await verifyDocumentsWithClaudeAI(dvStudent || {});
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-robot"></i> Re-Verify via Claude AI';
+    if (res.verified) {
+      document.getElementById('claudeResultList').innerHTML = Object.entries(res.details)
+        .map(([k,v]) => `<li><strong>${k.replace(/_/g,' ')}:</strong> ${v}</li>`).join('');
+      result.classList.add('show');
+      // Auto-check all
+      Object.keys(DOC_LABELS).forEach(key => {
+        const r = document.querySelector(`[name="dv_${key}"][value="Yes"]`);
+        if (r) r.checked = true;
+      });
+      showToast('success','Claude AI','Documents verified by AI successfully.');
+    }
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-robot"></i> Verify Documents via Claude AI (Vision)';
+    showToast('error','AI Error', e.message);
+  }
+}
+
+async function saveVerification() {
+  if (!dvStudent) return;
+  const data = {};
+  Object.keys(DOC_LABELS).forEach(key => {
+    const r = document.querySelector(`[name="dv_${key}"]:checked`);
+    data[key] = r ? r.value : 'No';
+  });
+  try {
+    await saveDocumentVerification(dvStudent.SSLC_Register, data, dvVerifyId);
+    showToast('success','Saved','Verification record saved to Firestore.');
+  } catch(e) { showToast('error','Save Failed', e.message); }
+}
+
+function resetDV() {
+  dvStudent = null; dvVerifyId = null;
+  document.getElementById('dvSearch').value = '';
+  document.getElementById('dvSection').style.display = 'none';
+  document.getElementById('dvError').classList.add('d-none');
+  document.getElementById('claudeResult').classList.remove('show');
+}
+
+// ========= Tab 3: Seat Allotment ========= //
+async function findStudentForSA() {
+  const sslc = document.getElementById('saSearch').value.trim();
+  if (!sslc) { showToast('info','Required','Enter SSLC Register Number.'); return; }
+  ['saError','saSuccess'].forEach(id => document.getElementById(id).classList.add('d-none'));
+  document.getElementById('saSection').style.display = 'none';
+  try {
+    const student = await searchStudentBySSLC(sslc);
+    if (!student) {
+      document.getElementById('saError').textContent = `No student found: ${sslc}`;
+      document.getElementById('saError').classList.remove('d-none'); return;
+    }
+    saStudent = student;
+    buildInfoStrip('saInfoStrip', [
+      ['Student Name', student.names], ['SSLC Register', student.SSLC_Register],
+      ['Marks Obtained', student.marks_obtained],
+      ['Preferred Branch', (student.course_name||'—').toUpperCase()],
+    ]);
+    document.getElementById('saSection').style.display = 'block';
+  } catch(e) { showToast('error','Error', e.message); }
+}
+
+async function doAllotment() {
+  if (!saStudent) return;
+  const branchId  = document.getElementById('saBranch').value;
+  const category  = document.getElementById('saCategory').value.trim();
+  const fees      = document.getElementById('saFees').value;
+  const receipt   = document.getElementById('saReceipt').value.trim();
+  if (!branchId || !category || !fees || !receipt) {
+    showToast('error','Incomplete','Fill all allotment fields.'); return;
+  }
+  const btn = document.getElementById('btnAllot');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner me-2" style="width:16px;height:16px;border-width:2px;border-top-color:#fff;"></span>Processing…';
+  try {
+    const result = await allotSeat(saStudent.id, saStudent.SSLC_Register, branchId, category, fees, receipt);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-check-circle"></i> Allot Seat via Firestore Transaction';
+    const s = document.getElementById('saSuccess');
+    s.classList.remove('d-none');
+    s.innerHTML = `✅ <strong>Seat Allotted!</strong> ${result.message} — Branch: <strong>${BRANCH_NAMES[branchId]||branchId}</strong>, Category: <strong>${category}</strong>`;
+    showToast('success','Seat Allotted!', `${saStudent.names} → ${BRANCH_NAMES[branchId]||branchId}`);
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-check-circle"></i> Allot Seat via Firestore Transaction';
+    document.getElementById('saError').textContent = e.message;
+    document.getElementById('saError').classList.remove('d-none');
+    showToast('error','Allotment Failed', e.message);
+  }
+}
+
+// ========= Tab 4: Seat Matrix ========= //
+function loadSeatMatrix() {
+  listenBranches(branches => {
+    document.getElementById('smLoading').style.display = 'none';
+    document.getElementById('smWrap').style.display    = 'block';
+    const cell = n => {
+      const cls = n===0?'#f87171':n<=5?'#fcd34d':'#6ee7b7';
+      const bg  = n===0?'rgba(239,68,68,0.12)':n<=5?'rgba(245,158,11,0.12)':'rgba(16,185,129,0.12)';
+      return `<td><span style="background:${bg};color:${cls};font-weight:800;padding:4px 14px;border-radius:20px;font-size:0.88rem;">${n}</span></td>`;
+    };
+    document.getElementById('smBody').innerHTML = branches.map(b => {
+      const total = b.government_seats + b.donor_seats + b.snq_seats;
+      return `<tr>
+        <td style="font-weight:700;color:var(--text-primary);">
+          ${b.id} — ${BRANCH_NAMES[b.id]||b.id}
+        </td>
+        ${cell(b.government_seats)}${cell(b.donor_seats)}${cell(b.snq_seats)}
+        <td><span style="background:rgba(99,102,241,0.12);color:#a5b4fc;font-weight:900;padding:4px 14px;border-radius:20px;font-size:0.88rem;">${total}</span></td>
+      </tr>`;
+    }).join('');
+  });
+}
+
+// ========= Tab 5: Allotment List ========= //
+async function loadAllotments() {
+  document.getElementById('alLoading').style.display = 'block';
+  document.getElementById('alList').style.display   = 'none';
+  try {
+    const list = await getAllSeatAllotments();
+    document.getElementById('alLoading').style.display = 'none';
+    const el = document.getElementById('alList');
+    el.style.display = 'block';
+    if (!list.length) {
+      el.innerHTML = `<div class="text-center py-5" style="color:#64748b;font-size:0.85rem;">No allotments yet.</div>`;
+      return;
+    }
+    el.innerHTML = list.map(a => `
+      <div class="allotment-row">
+        <div>
+          <div style="font-weight:600;font-size:0.9rem;color:var(--text-primary);">${a.SSLC_Register}</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);margin-top:3px;">
+            Branch: <strong style="color:var(--indigo-light);">${BRANCH_NAMES[a.branch_name]||a.branch_name}</strong>
+            &nbsp;·&nbsp; Category: ${a.allocated_category}
+            &nbsp;·&nbsp; Fees: ₹${a.fees_paid}
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="status-badge" style="background:rgba(99,102,241,0.15);color:var(--indigo-light);border:1px solid rgba(99,102,241,0.3);">
+            ${a.seat_type || 'allotted'}
+          </span>
+          <button class="btn-danger-soft" onclick="removeAllotment('${a.id}')">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>`).join('');
+  } catch(e) { showToast('error','Load Failed', e.message); }
+}
+
+async function removeAllotment(id) {
+  if (!confirm('Delete this allotment? The seat count will be restored.')) return;
+  try {
+    await deleteSeatAllotment(id);
+    showToast('success','Deleted','Allotment removed and seat restored.');
+    loadAllotments();
+  } catch(e) { showToast('error','Failed', e.message); }
+}
+
+// chatbot init
+document.getElementById('fabToggle').addEventListener('click',   () => document.getElementById('chatbotPanel').classList.toggle('open'));
+// fetch applicants on load
+loadApplicants();
+</script>
+</body>
+</html>
