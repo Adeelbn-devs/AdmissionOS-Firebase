@@ -23,6 +23,7 @@
       <a href="#branches"  class="nav-link-glass"><i class="fas fa-code-branch"></i> Branches</a>
       <a href="seat_balances.html" class="nav-link-glass"><i class="fas fa-chair"></i> Seat Matrix</a>
       <a href="admin.html" class="nav-link-glass"><i class="fas fa-shield-halved"></i> Admin</a>
+      <a href="#testimonials" class="nav-link-glass"><i class="fas fa-star"></i> Reviews</a>
       <a href="application_form.html" class="nav-btn-apply"><i class="fas fa-pen"></i> Apply Now</a>
     </div>
     <button class="navbar-toggler-custom" id="menuToggle"><i class="fas fa-bars"></i></button>
@@ -222,7 +223,113 @@
   </div>
 </section>
 
+<!-- FEEDBACK & TESTIMONIALS -->
+<section class="section-space" id="testimonials">
+  <div class="container">
+
+    <!-- Section header -->
+    <div class="text-center reveal">
+      <div class="section-eyebrow"><i class="fas fa-star"></i> Student Voices</div>
+      <h2 class="section-title">Testimonials &amp; <span class="grad-text">Feedback</span></h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">Share your experience with the admission process — your review helps future students.</p>
+    </div>
+
+    <!-- Feedback form -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-7 reveal reveal-delay-1">
+        <div class="feedback-form-wrapper glass-card">
+
+          <div class="feedback-form-header">
+            <div class="feedback-form-icon">✍️</div>
+            <div>
+              <h4>Leave a Review</h4>
+              <p>Takes less than a minute</p>
+            </div>
+          </div>
+
+          <form id="feedbackForm" novalidate>
+            <!-- Name -->
+            <div class="feedback-field">
+              <label class="feedback-label" for="fb-name">
+                <i class="fas fa-user"></i> Your Name
+              </label>
+              <input
+                type="text"
+                id="fb-name"
+                class="feedback-input"
+                placeholder="e.g. Rahul Kumar"
+                maxlength="60"
+                required
+              >
+            </div>
+
+            <!-- Star Rating -->
+            <div class="feedback-field">
+              <label class="feedback-label">
+                <i class="fas fa-star"></i> Rating
+              </label>
+              <div class="star-rating-group" id="starRatingGroup" role="group" aria-label="Star rating">
+                <input type="radio" id="star5" name="rating" value="5" class="star-radio">
+                <label for="star5" class="star-label" title="5 stars — Excellent">★</label>
+                <input type="radio" id="star4" name="rating" value="4" class="star-radio">
+                <label for="star4" class="star-label" title="4 stars — Very Good">★</label>
+                <input type="radio" id="star3" name="rating" value="3" class="star-radio">
+                <label for="star3" class="star-label" title="3 stars — Good">★</label>
+                <input type="radio" id="star2" name="rating" value="2" class="star-radio">
+                <label for="star2" class="star-label" title="2 stars — Fair">★</label>
+                <input type="radio" id="star1" name="rating" value="1" class="star-radio">
+                <label for="star1" class="star-label" title="1 star — Poor">★</label>
+              </div>
+              <span class="star-hint" id="starHint">Click to rate</span>
+            </div>
+
+            <!-- Message -->
+            <div class="feedback-field">
+              <label class="feedback-label" for="fb-message">
+                <i class="fas fa-comment-dots"></i> Your Message
+              </label>
+              <textarea
+                id="fb-message"
+                class="feedback-input feedback-textarea"
+                placeholder="Tell us about your admission experience…"
+                rows="4"
+                maxlength="400"
+                required
+              ></textarea>
+              <span class="feedback-char-count" id="charCount">0 / 400</span>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="feedback-submit-btn btn-primary-glow" id="feedbackSubmitBtn">
+              <i class="fas fa-paper-plane"></i> Submit Review
+            </button>
+
+            <!-- Status message -->
+            <div class="feedback-status" id="feedbackStatus"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live reviews grid -->
+    <div class="text-center mb-4 reveal">
+      <h3 class="section-title" style="font-size:1.5rem;">What Students Are <span class="grad-text">Saying</span></h3>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="feedback-grid" id="feedback-grid">
+      <!-- Skeleton placeholders shown before JS loads -->
+      <div class="feedback-card-skeleton"></div>
+      <div class="feedback-card-skeleton"></div>
+      <div class="feedback-card-skeleton"></div>
+    </div>
+
+  </div>
+</section>
+
 <!-- FOOTER -->
+
 <footer class="footer-glass">
   <div class="container">
     <p class="mb-1">
@@ -415,6 +522,140 @@ document.getElementById('chatbotClose').addEventListener('click', () => document
 
 /* ── Live branch data ────────────────────────────────────── */
 listenBranches(renderBranchCards);
+
+/* ── Feedback: char counter ──────────────────────────────── */
+const fbMessage  = document.getElementById('fb-message');
+const charCount  = document.getElementById('charCount');
+fbMessage.addEventListener('input', () => {
+  charCount.textContent = `${fbMessage.value.length} / 400`;
+});
+
+/* ── Feedback: star hint label ───────────────────────────── */
+const STAR_LABELS = { 1:'Poor', 2:'Fair', 3:'Good', 4:'Very Good', 5:'Excellent' };
+document.querySelectorAll('.star-radio').forEach(radio => {
+  radio.addEventListener('change', () => {
+    document.getElementById('starHint').textContent =
+      `${radio.value} star${radio.value > 1 ? 's' : ''} — ${STAR_LABELS[radio.value]}`;
+  });
+});
+
+/* ── Feedback: form submission ───────────────────────────── */
+document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name    = document.getElementById('fb-name').value.trim();
+  const rating  = document.querySelector('.star-radio:checked')?.value;
+  const message = fbMessage.value.trim();
+  const status  = document.getElementById('feedbackStatus');
+  const btn     = document.getElementById('feedbackSubmitBtn');
+
+  // Client-side validation
+  if (!name) {
+    status.textContent = '⚠ Please enter your name.';
+    status.className   = 'feedback-status error';
+    document.getElementById('fb-name').focus();
+    return;
+  }
+  if (!rating) {
+    status.textContent = '⚠ Please select a star rating.';
+    status.className   = 'feedback-status error';
+    return;
+  }
+  if (!message) {
+    status.textContent = '⚠ Please write a short message.';
+    status.className   = 'feedback-status error';
+    fbMessage.focus();
+    return;
+  }
+
+  // Loading state
+  btn.disabled      = true;
+  btn.innerHTML     = '<span class="loading-spinner"></span>&nbsp; Submitting…';
+  status.textContent = '';
+  status.className   = 'feedback-status';
+
+  try {
+    await submitFeedback(name, Number(rating), message);
+
+    // Reset form
+    e.target.reset();
+    charCount.textContent = '0 / 400';
+    document.getElementById('starHint').textContent = 'Click to rate';
+
+    // Success message
+    status.textContent = '✅ Thank you! Your review has been posted.';
+    status.className   = 'feedback-status success';
+
+    // Clear success message after 5 s
+    setTimeout(() => {
+      status.textContent = '';
+      status.className   = 'feedback-status';
+    }, 5000);
+
+  } catch (err) {
+    console.error('feedback submit error:', err);
+    status.textContent = '❌ Could not submit. Please try again.';
+    status.className   = 'feedback-status error';
+  } finally {
+    btn.disabled  = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Review';
+  }
+});
+
+/* ── Feedback: render review cards ───────────────────────── */
+function buildStars(rating) {
+  return Array.from({ length: 5 }, (_, i) =>
+    `<span class="${i < rating ? 'star-filled' : 'star-empty'}">★</span>`
+  ).join('');
+}
+
+function formatRelativeDate(timestamp) {
+  if (!timestamp) return '';
+  const date  = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+  const diff  = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (diff < 60)   return 'Just now';
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400)return `${Math.floor(diff / 3600)}h ago`;
+  if (diff < 604800)return `${Math.floor(diff / 86400)}d ago`;
+  return date.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function renderFeedbackCards(feedbacks) {
+  const grid = document.getElementById('feedback-grid');
+
+  if (!feedbacks.length) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:48px 20px;">
+        <div style="font-size:2.5rem;margin-bottom:12px;opacity:0.4;">💬</div>
+        <p style="color:var(--text-muted);font-size:0.9rem;">No reviews yet — be the first to share your experience!</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = feedbacks.map(fb => `
+    <div class="feedback-card">
+      <div class="feedback-card-stars">${buildStars(fb.rating)}</div>
+      <p class="feedback-card-message">${escapeHtml(fb.message)}</p>
+      <div class="feedback-card-footer">
+        <span class="feedback-card-name">— ${escapeHtml(fb.name)}</span>
+        <span class="feedback-card-date">${formatRelativeDate(fb.created_at)}</span>
+      </div>
+    </div>`
+  ).join('');
+}
+
+/* Prevent XSS in user-generated content */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/* ── Kick off live feedback listener ─────────────────────── */
+listenFeedbacks(renderFeedbackCards);
 </script>
 </body>
 </html>

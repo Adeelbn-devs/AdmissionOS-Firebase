@@ -242,3 +242,31 @@ async function verifyDocumentsWithClaudeAI(student) {
     throw new Error("AI verification failed.");
   }
 }
+
+// submit user feedback
+async function submitFeedback(name, rating, message) {
+  if (!name || !rating || !message) throw new Error("All fields are required.");
+  try {
+    await db.collection("feedbacks").add({
+      name: name.trim(),
+      rating: Number(rating),
+      message: message.trim(),
+      created_at: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch (err) {
+    throw new Error("Failed to submit feedback.");
+  }
+}
+
+// listen for live feedback updates
+function listenFeedbacks(callback) {
+  return db.collection("feedbacks")
+    .orderBy("created_at", "desc")
+    .onSnapshot(snapshot => {
+      const feedbacks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      callback(feedbacks);
+    }, err => {
+      console.error("error fetching feedbacks:", err);
+      callback([]);
+    });
+}
